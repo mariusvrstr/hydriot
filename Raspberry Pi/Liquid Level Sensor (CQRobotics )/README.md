@@ -1,7 +1,7 @@
 # Liquid Level Sensor - CQRobotics #
 Measure if the sensor is in contact with liquid
 
-[picture alt](url/picture.jpg "Sample sensor code runing on a remote VS Code SSH session")
+[picture alt](resources/sensor.jpg "The sensor")
 
 ## Resources ##
 
@@ -17,7 +17,7 @@ Measure if the sensor is in contact with liquid
 
 ### Connect the sensor with the Raspberry Pi ###
 
-Connection Image
+![picture alt](url/picture.jpg "Title is optional")
 
 ### Install WiringPI ###
 
@@ -35,4 +35,6 @@ wiringpi.piBoardRev()
 ```
 
 ### Run the sample_python.py file ###
+
+[picture alt](resources/running.jpg "Sample sensor code runing on a remote VS Code SSH session")
 
