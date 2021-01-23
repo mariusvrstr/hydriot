@@ -34,3 +34,14 @@ Enable I2C Interface in Raspberry Pi Config
 
 ### Run the files ###
 
+Run the configuration once:
+
+```console
+sudo python3 CQRobot_ADS1115.py
+```
+
+Monitor the Voltage
+
+```console
+sudo python3 ADS1115_ReadVoltage.py
+```
