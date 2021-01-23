@@ -26,6 +26,7 @@ Important
 ### Connect the sensor with the Raspberry Pi ###
 
 ![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/resources/connection.jpg)
+
 ___<sup>Connect the Sensor to the ADC Module on the A2 channel (G,V,S)</sup>___
 
 
@@ -54,3 +55,5 @@ Monitor the Voltage
 ```console
 sudo python3 ADS1115_ReadVoltage.py
 ```
+
+![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/resources/running.png)
