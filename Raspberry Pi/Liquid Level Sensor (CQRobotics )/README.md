@@ -11,10 +11,10 @@ Measure if the sensor is in contact with liquid
 
 ## Setup ##
 
-[X] A Raspberry Pi with VS Code and Python Environment 
-[] Connect the sensor with the Raspberry Pi
-[] Install WiringPI (CPP Library)
-[] Run the sample python script
+- [X] A Raspberry Pi with VS Code and Python Environment 
+- [] Connect the sensor with the Raspberry Pi
+- [] Install WiringPI (CPP Library)
+- [] Run the sample python script
 
 ### Connect the sensor with the Raspberry Pi ###
 
