@@ -1,8 +1,8 @@
 # Total Desolvable Solids (TDS) Sensor - CQRobotics #
 Measure what the solid counts is
 
-![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics%20)/resources/tds_sensor.jpg)
-![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics%20)/resources/adc_module.jpg)
+![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/resources/tds_sensor.jpg)
+![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/resources/adc_module.jpg)
 
 Important
 
@@ -24,13 +24,13 @@ Important
 
 ### Connect the sensor with the Raspberry Pi ###
 
-![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics%20)/resources/connection.jpg)
+![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/resources/connection.jpg)
 
 ### Enable I2C in Interfaces ###
 
 Enable I2C Interface in Raspberry Pi Config
 
-![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics%20)/resources/I2C_config.png)
+![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/resources/I2C_config.png)
 
 ### Run the files ###
 
