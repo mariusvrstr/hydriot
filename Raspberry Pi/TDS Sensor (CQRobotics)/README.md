@@ -26,7 +26,8 @@ Important
 ### Connect the sensor with the Raspberry Pi ###
 
 ![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/resources/connection.jpg)
-Connect the Sensor to the ADC Module on the A2 channel (G,V,S)
+___<sup>Connect the Sensor to the ADC Module on the A2 channel (G,V,S)</sup>___
+
 
 ### Enable I2C in Interfaces ###
 
