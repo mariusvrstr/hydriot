@@ -1,7 +1,7 @@
 # Liquid Level Sensor - CQRobotics #
 Measure if the sensor is in contact with liquid
 
-[picture alt](resources/sensor.jpg "The sensor")
+![](/resources/sensor.jpg)
 
 ## Resources ##
 
@@ -17,7 +17,7 @@ Measure if the sensor is in contact with liquid
 
 ### Connect the sensor with the Raspberry Pi ###
 
-![picture alt](url/picture.jpg "Title is optional")
+![](/url/connection.jpg)
 
 ### Install WiringPI ###
 
