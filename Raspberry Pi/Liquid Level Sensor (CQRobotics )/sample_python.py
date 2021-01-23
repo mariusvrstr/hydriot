@@ -24,10 +24,12 @@ tic=0
 
 try:
     while True:        
-        tic += 1
+        tic += 1 
+        val=LLS.digitalRead(1)
+
+        ## Set heading and clear previous values
         PrintHeading(tic)
 
-        val=LLS.digitalRead(1)
         if val==1:
             print("liquid found!")
         else:
@@ -39,6 +41,4 @@ try:
 except KeyboardInterrupt:
     print("Exit Monitoring")
     pass
-
-
 
