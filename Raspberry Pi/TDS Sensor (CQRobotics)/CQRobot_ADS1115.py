@@ -83,7 +83,7 @@ class ADS1115():
 		For Single-ended Output
 		0 : AINP = AIN0 and AINN = GND
 		1 : AINP = AIN1 and AINN = GND
-		2 : AINP = AIN2 and AINN = GND
+		2 : AINP = AIN2 and AINN = GND << Default from setup pictures
 		3 : AINP = AIN3 and AINN = GND
 		For Differential Output
 		0 : AINP = AIN0 and AINN = AIN1

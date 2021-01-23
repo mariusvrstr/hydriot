@@ -35,16 +35,20 @@ try:
     while True:        
         tic += 1
 
-        #Set the IIC address
+        #Set the IIC address (0X48 or 0X49 based on switch on ADC Module)
         ads1115.setAddr_ADS1115(0x48)
         #Sets the gain and input voltage range.
         ads1115.setGain(ADS1115_REG_CONFIG_PGA_6_144V)
-        #Get the Digital Value of Analog of selected channel
-        adc1 = ads1115.readVoltage(1)
+        #Get the Digital Value of Analog of selected channel (4 Channels on ADC Module: 0 to 3)
+        adc1 = ads1115.readVoltage(2)
         # Clear previous values and set heading
+
+        tds = ads1115.readValue()
+
         PrintHeading(tic)
 
-        print(" A1:%dmV "%(adc1['r']))
+        print("Voltage: A1:%dmV "%(adc1['r']))
+        print("TDS Value: %d"%(tds['r']))
 
         time.sleep(1) 
 
