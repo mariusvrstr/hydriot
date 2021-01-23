@@ -37,7 +37,7 @@ Enable I2C Interface in Raspberry Pi Config
 
 On the ADC Module there is a hardware switch on the circut board with one of two options (0X48 or 0X49)
 
-__Ensure that it is set to point to__ **0X48**
+Ensure that it is set to point to >> **0X48**
 
 ### Run the files ###
 
