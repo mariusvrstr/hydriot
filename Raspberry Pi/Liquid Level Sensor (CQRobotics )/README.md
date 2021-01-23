@@ -22,20 +22,17 @@ Measure if the sensor is in contact with liquid
 
 ### Install WiringPI ###
 
-```console
-sudo apt-get update
-sudo apt-get install python-dev python-pip
-sudo pip install wiringpi2
-sudo pip3 install wiringpi
-```
+Run the configuration once:
 
 ```console
-sudo python
-import wiringpi
-wiringpi.piBoardRev()
+sudo python3 CQRobot_ADS1115.py
+```
+
+Monitor the Voltage
+
+```console
+sudo python3 ADS1115_ReadVoltage.py
 ```
 
 ### Run the sample_python.py file ###
-
-![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/Liquid%20Level%20Sensor%20(CQRobotics%20)/resources/running.png)
 
