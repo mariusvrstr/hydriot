@@ -56,4 +56,5 @@ Monitor the Voltage
 sudo python3 ADS1115_ReadVoltage.py
 ```
 
-![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/resources/running.png)
+![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/resources/running.PNG)
+Values while reading filtered water
