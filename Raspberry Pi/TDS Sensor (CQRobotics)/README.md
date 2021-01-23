@@ -20,6 +20,7 @@ Important
 - [X] A Raspberry Pi with VS Code and Python Environment 
 - [ ] Connect the sensor with the Raspberry Pi
 - [ ] Enable I2C in Interfaces
+- [ ] Check the I2C Switch
 - [ ] Run the files
 
 ### Connect the sensor with the Raspberry Pi ###
@@ -31,6 +32,12 @@ Important
 Enable I2C Interface in Raspberry Pi Config
 
 ![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/resources/I2C_config.png)
+
+### Check the I2C Switch ###
+
+On the ADC Module there is a hardware switch on the circut board with one of two options (0X48 or 0X49)
+
+__Ensure that it is set to point to__ **0X48**
 
 ### Run the files ###
 
