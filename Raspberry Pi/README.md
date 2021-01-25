@@ -29,5 +29,22 @@ Easily developer on your Raspberry Pi device from your desktop over wifi, no nee
     ```
 + Create a new Dev folder (/home/pi/Dev)
 
+
 ## Configure Desktop Environment ##
++ [Download](https://code.visualstudio.com/#alt-downloads) and install VS Code
+    + Install the **Remote - SSH** extension
++ Connect to the Raspberry Pi VS Code
+    + Open the remote explorer
+      ![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/_resources/RemoteVsCodeExplorer.png)
+    + SSH Targets + Add (Use the Raspberry Pi IP set by DHCP)
+    + Enter the SSH command `$ SSH [user]@[IP/fqdn] -A`
+    
+      ![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/_resources/sshCommand.png)
+    + Choose Linux OS and enter password as prompted (Updated pi user password)
+      If you have issues here first check that SSH work with the same command from PowerShell
+
+
+
+
+
 
