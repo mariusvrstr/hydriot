@@ -14,9 +14,11 @@ Easily developer on your Raspberry Pi device from your desktop over wifi, no nee
   Raspberry Icon > Preferences > Raspberry Pi Configuration > Interfaces > SSH enable > OK
   ![https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/_resources/EnableSSH.png]
 + Configure static IP (Else the IP will change from time to time)
-    + Get current interface name and IP (`$ ip r | grep default`)
-      via IP = DHCP, wlan0 = interface name, src IP = issued IP
-
+    + Get current interface name and IP `$ ip r | grep default`
+      via = DHCP IP, wlan0 = interface name, src IP = issued IP
+    + Get the device Mac for interface  `$ cat /sys/class/net/{interface name}/address`
+    + Configure a static reservation on the network DHCP
+      ![https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/_resources/ReserveDHCP.png]
 
 
 
