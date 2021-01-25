@@ -1,7 +1,9 @@
 # Raspberry Pi Remote VS Code Environment #
 Easily developer on your Raspberry Pi device from your desktop over wifi, no need to swap keyboard and mouse everytime you want to do some IoT dev.
 
-
+* Raspberry Pi Dev Environment Setup
+* Configure Desktop Environment
+* Configure SSH Key
 
 ## Raspberry Pi Dev Environment Setup ##
 + [Latest Raspian OS](https://www.raspberrypi.org/documentation/installation/installing-images) on your Raspberry Pi
@@ -35,6 +37,7 @@ Easily developer on your Raspberry Pi device from your desktop over wifi, no nee
     + Install the **Remote - SSH** extension
 + Connect to the Raspberry Pi VS Code
     + Open the remote explorer
+    
       ![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/_resources/RemoteVsCodeExplorer.png)
     + SSH Targets + Add (Use the Raspberry Pi IP set by DHCP)
     + Enter the SSH command `$ SSH [user]@[IP/fqdn] -A`
@@ -44,7 +47,37 @@ Easily developer on your Raspberry Pi device from your desktop over wifi, no nee
       If you have issues here first check that SSH work with the same command from PowerShell
 
 
+## Configure SSH Key ##
+This is optional but will allow you to connect seemlessly without needing to enter a password often during remote session. Note that this approach is not the most secure as your will have your SSH private key in cleartext file on your Desktop but good enough for dev.
++ Generate a SSH Key from PuttyGen
+    + Copy public key into a **id_rsa.pub** file
+  
+      ![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/_resources/PuTTyGen_publicKey.png)  
+    + Save the private key (In Open SSH format) as **id_rsa** file
 
-
-
-
+      ![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/_resources/PuTTyGen_privateKey.png)  
+    + Copy the above 2 files to C:\Users\{username}\.ssh\pi\
+    
+      ![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/_resources/sshKeys.png)  
++ Add Key to Raspberry Pi (Can use remote PowerShell SSH connection - Makes copy paste easier)
+    + Open SSH connection to PI e.g. `ssh pi@10.0.0.15`
+    + Create SSH Folder (Will complain if already exist) `$ sudo mkdir ~/.ssh`
+    + Edit the SSH Authorization file `$ sudo nano ~/.ssh/authorized_keys`
+      Copy paste from **id_rsa.pub** (Public Key) file >> Cntr+O (Save) Cntr+X (Exit)
+    + Protect the file properly
+    
+      ```console
+      sudo chmod 700 ~/.ssh
+      sudo chmod 700 ~/.ssh -R
+      sudo chmod 600 ~/.ssh/authorized_keys
+      sudo chmod 644 ~/.ssh/authorized_keys
+      sudo chown pi:pi ~/.ssh/authorized_keys    
+      ```
+      
++ Configure the SSH Connection
+    + Open the config file (Global SSH config file) in VS Code (Settings cog in remote window)
+    + Add the IdentityFile reference pointing to the id_rsa file (Private Key)
+    
+    ![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/_resources/sshConfigurationFile.png)    
+    + Save and restart VS Code (Desktop)
++ Reconnect to remote VS Code environment (Should NOT prompt for pass)
