@@ -19,6 +19,7 @@ Easily developer on your Raspberry Pi device from your desktop over wifi, no nee
       via = DHCP IP, wlan0 = interface name, src IP = issued IP
     + Get the device Mac for interface  `$ cat /sys/class/net/{interface name}/address`
     + Configure a static reservation on the network DHCP
+    
       ![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/_resources/ReserveDHCP.png)
     + Restart the raspberry pi or renew the IP
     
