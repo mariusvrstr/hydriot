@@ -1,8 +1,8 @@
 # Total Desolvable Solids (TDS) Sensor - CQRobotics #
 Measure what the solid counts is
 
-![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/resources/tds_sensor.jpg)
-![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/resources/adc_module.jpg)
+![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/_resources/tds_sensor.jpg)
+![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/_resources/adc_module.jpg)
 
 Important
 
@@ -25,7 +25,7 @@ Important
 
 ### Connect the sensor with the Raspberry Pi ###
 
-![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/resources/connection.jpg)
+![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/_resources/connection.jpg)
 
 ___<sup>Connect the Sensor to the ADC Module on the A2 channel (G,V,S)</sup>___
 
@@ -34,7 +34,7 @@ ___<sup>Connect the Sensor to the ADC Module on the A2 channel (G,V,S)</sup>___
 
 Enable I2C Interface in Raspberry Pi Config
 
-![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/resources/I2C_config.png)
+![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/_resources/I2C_config.png)
 
 ### Check the I2C Switch ###
 
@@ -56,6 +56,6 @@ Monitor the Voltage
 sudo python3 ADS1115_ReadVoltage.py
 ```
 
-![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/resources/running.PNG)
+![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/TDS%20Sensor%20(CQRobotics)/_resources/running.PNG)
 
 ___<sup>Values while reading filtered water</sup>___

@@ -1,7 +1,7 @@
 # Liquid Level Sensor - CQRobotics #
 Measure if the sensor is in contact with liquid
 
-![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/Liquid%20Level%20Sensor%20(CQRobotics%20)/resources/sensor.jpg)
+![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/Liquid%20Level%20Sensor%20(CQRobotics%20)/_resources/sensor.jpg)
 
 
 ## Resources ##
@@ -18,7 +18,7 @@ Measure if the sensor is in contact with liquid
 
 ### Connect the sensor with the Raspberry Pi ###
 
-![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/Liquid%20Level%20Sensor%20(CQRobotics%20)/resources/connection.jpg)
+![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/Liquid%20Level%20Sensor%20(CQRobotics%20)/_resources/connection.jpg)
 
 ### Install WiringPI ###
 
@@ -37,5 +37,5 @@ wiringpi.piBoardRev()
 
 ### Run the sample_python.py file ###
 
-![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/Liquid%20Level%20Sensor%20(CQRobotics%20)/resources/running.png)
+![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/Liquid%20Level%20Sensor%20(CQRobotics%20)/_resources/running.png)
 
