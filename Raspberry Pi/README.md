@@ -10,6 +10,7 @@ Easily developer on your Raspberry Pi device from your desktop over wifi, no nee
 
 + Connected to local Wi-Fi (IoT devices is not known for being secure suggest subnetwork / VLAN isolation)
 + [Download](https://code.visualstudio.com/#alt-downloads) the latest VS Code for Debian (ARM .deb file) and install
+    + Install Extentions: Python Extention, Pilint and Autopep8
 + Enable SSH (Disabled by default)
   Raspberry Icon > Preferences > Raspberry Pi Configuration > Interfaces > SSH enable > OK
   ![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/_resources/EnableSSH.png)
@@ -19,6 +20,13 @@ Easily developer on your Raspberry Pi device from your desktop over wifi, no nee
     + Get the device Mac for interface  `$ cat /sys/class/net/{interface name}/address`
     + Configure a static reservation on the network DHCP
       ![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/_resources/ReserveDHCP.png)
+    + Restart the raspberry pi or renew the IP
+    
+    ```console
+   	sudo dhclient -r
+    sudo dhclient
+    ```
++ Create a new Dev folder (/home/pi/Dev)
 
-
+## Configure Desktop Environment ##
 
