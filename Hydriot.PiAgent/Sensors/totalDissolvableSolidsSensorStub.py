@@ -1,4 +1,4 @@
-from hydriot_piAgent_contracts import SensorAbstract
+from Contracts.sensorAbstract import SensorAbstract
 
 class TDSSensor(SensorAbstract):
 
