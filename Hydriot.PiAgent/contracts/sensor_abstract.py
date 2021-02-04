@@ -3,35 +3,35 @@ import os
 from abc import ABC, abstractmethod ## abstract module
 
 class SensorAbstract(ABC):
-    Name = "N/A"
-    FrequencyInSeconds = 1
+    _name = "N/A"
+    _frequency_in_seconds = 1
 
-    def __init__(self, sensorName):
-        self.Name = sensorName
-
-    ##TODO: Missing functionality
-    def IsHealthy(self): raise NotImplementedError 
+    def __init__(self, sensor_name):
+        self._name = sensor_name
 
     ##TODO: Missing functionality
-    def IsAvailable(self): raise NotImplementedError
+    def is_healthy(self): raise NotImplementedError 
 
-    def SetFrequency(self, inSeconds):
-        self.FrequencyInSeconds = inSeconds
+    ##TODO: Missing functionality
+    def is_available(self): raise NotImplementedError
+
+    def set_frequency(self, inSeconds):
+        self._frequency_in_seconds = inSeconds
         pass     
 
-    def StartMonitoring(self):
+    def start_monitoring(self):
         tic=0        
 
         try:
             while True: 
                 tic += 1
-                currentValue = self.ReadValue()
+                currentValue = self.read_value()
 
                 ## Make OS Resilient (Clear vs CLS)
                 os.system('cls')
 
                 header = "Raspberry Pi - "
-                header += self.Name
+                header += self._name
                 print(header)
                 print("=======================================================")
 
@@ -43,7 +43,7 @@ class SensorAbstract(ABC):
                 else: footer += "[-]"
                 print(footer)
 
-                time.sleep(self.FrequencyInSeconds) 
+                time.sleep(self._frequency_in_seconds) 
                 
         except KeyboardInterrupt:
             print("Exit Monitoring")
@@ -51,7 +51,7 @@ class SensorAbstract(ABC):
         pass
 
     @abstractmethod
-    def ReadValue(self):  pass
+    def read_value(self):  pass
 
 
 
