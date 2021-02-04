@@ -1,5 +1,6 @@
 import os
 import configparser
+from utilities.operating_system import OperatingSystem
 
 class Config(object):
     _configfile_name = "config.ini"
@@ -13,10 +14,8 @@ class Config(object):
             # Add content to the file
             config = configparser.ConfigParser()
 
-            config.keys['vesion'] = 'V1.0'
-
             config.add_section("environment")
-            config.set("environment", "os", "windows")
+            config.set("environment", "os", OperatingSystem().name())
             
             config.write(cfgfile)
             cfgfile.close()
