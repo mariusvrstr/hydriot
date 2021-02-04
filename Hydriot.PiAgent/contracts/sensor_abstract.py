@@ -1,6 +1,7 @@
 import time
 import os
 from abc import ABC, abstractmethod ## abstract module
+from utilities.operating_system import OperatingSystem
 
 class SensorAbstract(ABC):
     _name = "N/A"
@@ -27,8 +28,7 @@ class SensorAbstract(ABC):
                 tic += 1
                 currentValue = self.read_value()
 
-                ## Make OS Resilient (Clear vs CLS)
-                os.system('cls')
+                OperatingSystem().clear_console()
 
                 header = "Raspberry Pi - "
                 header += self._name
@@ -46,7 +46,10 @@ class SensorAbstract(ABC):
                 time.sleep(self._frequency_in_seconds) 
                 
         except KeyboardInterrupt:
+            OperatingSystem().clear_console()            
             print("Exit Monitoring")
+            time.sleep(self._frequency_in_seconds) 
+            OperatingSystem().clear_console()
             pass
         pass
 

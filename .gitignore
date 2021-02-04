@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Config INI file
+config.ini
+
 # C extensions
 *.so
 
