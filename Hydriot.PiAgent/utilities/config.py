@@ -16,7 +16,8 @@ class Config(object):
 
             config.add_section("environment")
             config.set("environment", "os", OperatingSystem().name())
-            
+            config.set("environment", "enable_sim", "true")
+           
             config.write(cfgfile)
             cfgfile.close()
 
@@ -25,5 +26,10 @@ class Config(object):
          cfgfile = config.read(self._configfile_name)
          return config['environment']['os']
 
+    def get_enable_sim(self):           
+        config = configparser.ConfigParser()
+        cfgfile = config.read(self._configfile_name)
+        simulater_enabled = config['environment']['enable_sim'] == "true"
+        return simulater_enabled
 
 

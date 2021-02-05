@@ -2,6 +2,7 @@ import time
 import os
 from abc import ABC, abstractmethod ## abstract module
 from utilities.operating_system import OperatingSystem
+from utilities.config import Config
 
 class SensorAbstract(ABC):
     _name = "N/A"
@@ -32,13 +33,19 @@ class SensorAbstract(ABC):
 
                 header = "Raspberry Pi - "
                 header += self._name
+                print("============================================================")
                 print(header)
-                print("=======================================================")
+                print("============================================================")
 
                 print("Current Value: " + str(currentValue))
 
                 print("")
-                footer = "...Press Cntr+C to exit monitoring "
+                if Config().get_enable_sim():
+                    print("------------------------------------------------------------")
+                    print("- WARNING! Simulator mode enabled, sensor data is NOT real -")
+                    print("------------------------------------------------------------")
+
+                footer = "*Press Cntr+C to exit monitoring "
                 if tic%2 == 0: footer += "[|]"
                 else: footer += "[-]"
                 print(footer)
