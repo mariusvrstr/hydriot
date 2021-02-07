@@ -5,7 +5,7 @@ class WaterLevelSensorStub(SensorAbstract):
     def __init__(self):
         SensorAbstract.__init__(self, "Water Level Sensor", 1)
 
-    async def _read_implimentation(self):
+    def _read_implimentation(self):
         ## Stubbed Reading
         reading = 1
         return reading

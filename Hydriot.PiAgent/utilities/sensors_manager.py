@@ -4,6 +4,7 @@ from utilities.operating_system import OperatingSystem
 from utilities.config import Config
 from datetime import datetime
 import time
+import asyncio
 
 class SensorsManager(object):
     sensor_list = dict()
@@ -28,9 +29,17 @@ class SensorsManager(object):
             pass
 
     def start_monitoring(self):
+       
+        # loop = asyncio.new_event_loop()
+        # threading.Thread(target=loop.run_forever).start()
+
         for key in self.sensor_list:
             sensor = self.sensor_list[key]
             sensor.start_monitoring()
+            #future = asyncio.run_coroutine_threadsafe(sensor.read_value(), loop)
+
+        ## loop.call_soon_threadsafe(loop.stop)   
+               
         pass
 
     def stop_monitoring(self):
@@ -72,7 +81,7 @@ class SensorsManager(object):
                 footer += "[-]" if toggel else "[|]"
                 print(footer)            
 
-                time.sleep(1)
+                time.sleep(2)
         except KeyboardInterrupt:
             self.stop_monitoring()
             OperatingSystem().clear_console()            

@@ -11,6 +11,8 @@ class SensorAbstract(ABC):
     _name = "N/A"
     _frequency_in_seconds = 1    
     _is_monitoring = False
+    _loop_count = 0
+ 
 
     def __init__(self, sensor_name, reading_frequency):
         self._name = sensor_name    
@@ -41,31 +43,23 @@ class SensorAbstract(ABC):
 
     def start_monitoring(self):
         self._is_monitoring = True
-
-        ## This is not yet working, needs to kick of a background loop that will update reading as prescribed
-        ## but let the main process continue. There should be one for each sensor.
-
-        loop = asyncio.get_event_loop()
-        task = loop.create_task(self.read_value())       
+        asyncio.run(self.read_value())
 
         pass
-
-    @asyncio.coroutine
+    
     async def read_value(self):
+        # await asyncio.sleep(self._frequency_in_seconds)
 
-        while self._is_monitoring:
-            await asyncio.sleep(self._frequency_in_seconds)
+        self._loop_count += 1        
+        print(f"Read {self._name} count: {self._loop_count}")        
 
-            self._latest_value = self._read_implimentation()
+        self._latest_value = self._read_implimentation()
+        print(f"Read {self._name} with value of {self._latest_value} - Monitoring: {self._is_monitoring}")    
 
-            print("Do read")    
-            self._last_read_time = datetime.now()  
-                  
+        self._last_read_time = datetime.now()                  
 
-            return self._latest_value
+        return self._latest_value
 
-        print("stop read")
-      
 
     @abstractmethod
     def _read_implimentation(self):  pass
