@@ -64,7 +64,7 @@ class SensorsManager(object):
 
                 if Config().get_enable_sim():
                     print("----------------------------------------------------")
-                    print("WARNING! Simulator Mode Enbled")
+                    print("WARNING! Simulator Mode Enabled")
                     pass
                 
                 print("----------------------------------------------------")    
