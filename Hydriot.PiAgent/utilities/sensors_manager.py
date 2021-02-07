@@ -35,7 +35,8 @@ class SensorsManager(object):
 
         for key in self.sensor_list:
             sensor = self.sensor_list[key]
-            sensor.start_monitoring()
+            asyncio.run(sensor.start_monitoring()) 
+            
             #future = asyncio.run_coroutine_threadsafe(sensor.read_value(), loop)
 
         ## loop.call_soon_threadsafe(loop.stop)   

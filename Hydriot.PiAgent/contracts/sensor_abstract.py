@@ -30,10 +30,13 @@ class SensorAbstract(ABC):
     def is_healthy(self): 
         time_passed = (datetime.now() - self._last_read_time).total_seconds()
 
-        if self._is_monitoring and (time_passed > (self._frequency_in_seconds * 3)):
+        if self.is_available and not self._is_monitoring:
             return False
-
-        return True        
+        elif self._is_monitoring and (time_passed > (self._frequency_in_seconds * 3)):
+            return False
+        else:
+            return True
+     
 
     ## IMpliment in the derived class
     def is_available(self): raise NotImplementedError
@@ -41,16 +44,23 @@ class SensorAbstract(ABC):
     def stop_monitoring(self):
         self._is_monitoring = False
 
-    def start_monitoring(self):
+    async def start_monitoring(self):
         self._is_monitoring = True
-        asyncio.run(self.read_value())
+
+        while self._is_monitoring:
+            await asyncio.sleep(1)
+            self.read_value()     
+
+            # Exit early
+            if self._loop_count >= 3:
+                self._is_monitoring = False
 
         pass
     
-    async def read_value(self):
-        # await asyncio.sleep(self._frequency_in_seconds)
-
+    def read_value(self):        
         self._loop_count += 1        
+        time.sleep(1)
+
         print(f"Read {self._name} count: {self._loop_count}")        
 
         self._latest_value = self._read_implimentation()
