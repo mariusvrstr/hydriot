@@ -5,3 +5,4 @@
 ## Dependancies
 
 pip install dependency-injector
+pip install asyncio

@@ -1,67 +1,74 @@
 import time
 import os
+from datetime import datetime
 from abc import ABC, abstractmethod ## abstract module
 from utilities.operating_system import OperatingSystem
 from utilities.config import Config
+import asyncio
+
 
 class SensorAbstract(ABC):
     _name = "N/A"
-    _frequency_in_seconds = 1
+    _frequency_in_seconds = 1    
+    _is_monitoring = False
 
-    def __init__(self, sensor_name):
-        self._name = sensor_name
+    def __init__(self, sensor_name, reading_frequency):
+        self._name = sensor_name    
+        self._frequency_in_seconds = reading_frequency
+        # must be removed
+        self._latest_value = -1
+        self._last_read_time = datetime.now()
 
-    ##TODO: Missing functionality
-    def is_healthy(self): raise NotImplementedError 
+    def get_last_read_time(self):
+        return self._last_read_time
+    
+    def get_latest_value(self):
+        return self._latest_value
 
-    ##TODO: Missing functionality
+    def is_healthy(self): 
+        time_passed = (datetime.now() - self._last_read_time).total_seconds()
+
+        if self._is_monitoring and (time_passed > (self._frequency_in_seconds * 3)):
+            return False
+
+        return True        
+
+    ## IMpliment in the derived class
     def is_available(self): raise NotImplementedError
 
-    def set_frequency(self, inSeconds):
-        self._frequency_in_seconds = inSeconds
-        pass     
+    def stop_monitoring(self):
+        self._is_monitoring = False
 
     def start_monitoring(self):
-        tic=0        
+        self._is_monitoring = True
 
-        try:
-            while True: 
-                tic += 1
-                currentValue = self.read_value()
+        ## This is not yet working, needs to kick of a background loop that will update reading as prescribed
+        ## but let the main process continue. There should be one for each sensor.
 
-                OperatingSystem().clear_console()
+        loop = asyncio.get_event_loop()
+        task = loop.create_task(self.read_value())       
 
-                header = "Raspberry Pi - "
-                header += self._name
-                print("============================================================")
-                print(header)
-                print("============================================================")
-
-                print("Current Value: " + str(currentValue))
-
-                print("")
-                if Config().get_enable_sim():
-                    print("------------------------------------------------------------")
-                    print("- WARNING! Simulator mode enabled, sensor data is NOT real -")
-                    print("------------------------------------------------------------")
-
-                footer = "*Press Cntr+C to exit monitoring "
-                if tic%2 == 0: footer += "[|]"
-                else: footer += "[-]"
-                print(footer)
-
-                time.sleep(self._frequency_in_seconds) 
-                
-        except KeyboardInterrupt:
-            OperatingSystem().clear_console()            
-            print("Exit Monitoring")
-            time.sleep(self._frequency_in_seconds) 
-            OperatingSystem().clear_console()
-            pass
         pass
 
+    @asyncio.coroutine
+    async def read_value(self):
+
+        while self._is_monitoring:
+            await asyncio.sleep(self._frequency_in_seconds)
+
+            self._latest_value = self._read_implimentation()
+
+            print("Do read")    
+            self._last_read_time = datetime.now()  
+                  
+
+            return self._latest_value
+
+        print("stop read")
+      
+
     @abstractmethod
-    def read_value(self):  pass
+    def _read_implimentation(self):  pass
 
 
 
