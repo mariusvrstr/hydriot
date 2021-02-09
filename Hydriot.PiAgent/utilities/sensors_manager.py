@@ -29,18 +29,10 @@ class SensorsManager(object):
             pass
 
     def start_monitoring(self):
-       
-        # loop = asyncio.new_event_loop()
-        # threading.Thread(target=loop.run_forever).start()
-
         for key in self.sensor_list:
             sensor = self.sensor_list[key]
-            asyncio.run(sensor.start_monitoring()) 
-            
-            #future = asyncio.run_coroutine_threadsafe(sensor.read_value(), loop)
-
-        ## loop.call_soon_threadsafe(loop.stop)   
-               
+            asyncio.ensure_future(sensor.start_monitoring())  
+     
         pass
 
     def stop_monitoring(self):
@@ -49,7 +41,8 @@ class SensorsManager(object):
             sensor.stop_monitoring()
         pass
 
-    def display_sensor_readings_in_console(self):
+
+    async def monitor_sensors(self):
         toggel = False
 
         try:
@@ -82,12 +75,12 @@ class SensorsManager(object):
                 footer += "[-]" if toggel else "[|]"
                 print(footer)            
 
-                time.sleep(2)
+                await asyncio.sleep(2)
         except KeyboardInterrupt:
             self.stop_monitoring()
             OperatingSystem().clear_console()            
             print("Exit Monitoring")
-            time.sleep(3) 
+            await asyncio.sleep(3) 
             OperatingSystem().clear_console()
             pass
             

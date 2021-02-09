@@ -4,8 +4,8 @@ from utilities.operating_system import OperatingSystem
 
 class Config(object):
     _configfile_name = "config.ini"
-
-    def initialize_file(self):
+    
+    def __init__(self):
         # Check if there is already a configurtion file
         if not os.path.isfile(self._configfile_name):
             # Create the configuration file as it doesn't exist yet
@@ -20,11 +20,12 @@ class Config(object):
            
             config.write(cfgfile)
             cfgfile.close()
+      
 
     def get_os(self):         
-         config = configparser.ConfigParser()
-         cfgfile = config.read(self._configfile_name)
-         return config['environment']['os']
+        config = configparser.ConfigParser()
+        cfgfile = config.read(self._configfile_name)
+        return config['environment']['os']
 
     def get_enable_sim(self):           
         config = configparser.ConfigParser()

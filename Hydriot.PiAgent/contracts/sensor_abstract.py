@@ -11,8 +11,7 @@ class SensorAbstract(ABC):
     _name = "N/A"
     _frequency_in_seconds = 1    
     _is_monitoring = False
-    _loop_count = 0
- 
+    _count = 0
 
     def __init__(self, sensor_name, reading_frequency):
         self._name = sensor_name    
@@ -48,25 +47,16 @@ class SensorAbstract(ABC):
         self._is_monitoring = True
 
         while self._is_monitoring:
-            await asyncio.sleep(1)
-            self.read_value()     
-
-            # Exit early
-            if self._loop_count >= 3:
-                self._is_monitoring = False
-
+            await asyncio.sleep(self._frequency_in_seconds)
+            self.read_value()
         pass
     
     def read_value(self):        
-        self._loop_count += 1        
-        time.sleep(1)
-
-        print(f"Read {self._name} count: {self._loop_count}")        
-
         self._latest_value = self._read_implimentation()
-        print(f"Read {self._name} with value of {self._latest_value} - Monitoring: {self._is_monitoring}")    
+        self._count += 1
+        # print(f"{self._count} - Read {self._name} with value of {self._latest_value} - Monitoring: {self._is_monitoring}")    
 
-        self._last_read_time = datetime.now()                  
+        self._last_read_time = datetime.now()           
 
         return self._latest_value
 
