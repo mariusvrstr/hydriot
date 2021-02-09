@@ -81,3 +81,11 @@ This is optional but will allow you to connect seemlessly without needing to ent
     ![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/_resources/sshConfigurationFile.png)    
     + Save and restart VS Code (Desktop)
 + Reconnect to remote VS Code environment (Should NOT prompt for pass)
+
+
+# Check the Python Version
+python -V
+
+If your version is below v3.7 please update (using these instructions)[https://installvirtual.com/how-to-install-python-3-8-on-raspberry-pi-raspbian/]
+
+
