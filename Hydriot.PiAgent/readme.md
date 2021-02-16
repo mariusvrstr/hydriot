@@ -8,6 +8,4 @@ pip install dependency-injector
 
 pip install asyncio
 
-sudo pip install wiringpi2
-
-sudo pip3 install wiringpi
+pip3 install wiringpi
