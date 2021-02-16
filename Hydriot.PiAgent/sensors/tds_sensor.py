@@ -12,7 +12,7 @@ class TDSSensorStub(SensorAbstract):
         return reading
     
     def is_available(self): 
-        return False
+        return True
 
 
 class TDSSensor(SensorAbstract):
@@ -21,7 +21,7 @@ class TDSSensor(SensorAbstract):
         SensorAbstract.__init__(self, "Total Dissolvable Solids (TDS) Sensor", 2)
 
     def is_available(self): 
-        return True
+        return False
 
     def _read_implimentation(self):
         reading = 111
