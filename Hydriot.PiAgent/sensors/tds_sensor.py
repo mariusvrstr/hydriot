@@ -12,7 +12,7 @@ class TDSSensorStub(SensorAbstract):
         return reading
     
     def is_available(self): 
-        return True
+        return False
 
 
 class TDSSensor(SensorAbstract):
