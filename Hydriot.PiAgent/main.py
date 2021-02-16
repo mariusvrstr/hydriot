@@ -7,9 +7,7 @@
 from utilities.config import Config
 from utilities.sensors_manager import SensorsManager
 from utilities.operating_system import OperatingSystem
-import concurrent.futures
 import asyncio
-
 
 async def start_sensors():
     ## Scan for available sensors
