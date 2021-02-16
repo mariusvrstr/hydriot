@@ -7,3 +7,5 @@ Build using Python 3.9.1
 pip install dependency-injector
 
 pip install asyncio
+
+pip3 install wiringpi
