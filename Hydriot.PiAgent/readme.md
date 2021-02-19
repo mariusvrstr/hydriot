@@ -24,5 +24,6 @@ python -m ensurepip
 ```Console
 python -m pip install dependency-injector
 python -m pip install asyncio
-python -m pip install install wiringpi
+python -m pip install wiringpi
+python -m pip install smbus
 ```
