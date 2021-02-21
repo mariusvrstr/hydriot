@@ -16,7 +16,7 @@ class DeviceManager(object):
 
                 OperatingSystem().clear_console()
                 print("=====================================================")
-                print("==== Available Sensors & triggers from the Agent ====")
+                print("==== Available Sensors & Triggers from the Agent ====")
                 print("=====================================================")
                 print()
 
