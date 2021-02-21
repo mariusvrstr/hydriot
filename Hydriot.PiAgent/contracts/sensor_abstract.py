@@ -35,10 +35,6 @@ class SensorAbstract(ABC):
             return False
         else:
             return True
-     
-
-    ## IMpliment in the derived class
-    def is_available(self): raise NotImplementedError
 
     def stop_monitoring(self):
         self._is_monitoring = False
@@ -47,24 +43,22 @@ class SensorAbstract(ABC):
         self._is_monitoring = True
 
         while self._is_monitoring:
-            await asyncio.sleep(self._frequency_in_seconds)
             self.read_value()
+            await asyncio.sleep(self._frequency_in_seconds)            
         pass
     
     def read_value(self):        
         self._latest_value = self._read_implimentation()
-        self._count += 1
-        # print(f"{self._count} - Read {self._name} with value of {self._latest_value} - Monitoring: {self._is_monitoring}")    
+        self._count += 1  
 
         self._last_read_time = datetime.now()           
 
         return self._latest_value
 
+    @abstractmethod
+    def _read_implimentation(self): raise NotImplementedError
 
     @abstractmethod
-    def _read_implimentation(self):  pass
-
-
-
+    def is_available(self): raise NotImplementedError
 
 
