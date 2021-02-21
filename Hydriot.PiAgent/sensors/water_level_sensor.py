@@ -5,7 +5,7 @@ import os
 
 class WaterLevelSensorStub(SensorAbstract):
 
-    def __init__(self):
+    def __init__(self, ):
         SensorAbstract.__init__(self, "Water Level Sensor", 1)
 
     def _read_implimentation(self):
