@@ -24,7 +24,7 @@ class WaterLevelSensor(SensorAbstract):
         GPIO.wiringPiSetup()
     
     def is_available(self):
-        return True
+        return False
 
     def _read_implimentation(self):
         reading = GPIO.digitalRead(1)

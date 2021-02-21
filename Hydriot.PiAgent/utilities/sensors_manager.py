@@ -1,4 +1,3 @@
-from utilities.config import Config
 from utilities.dependency_injection import Container
 from utilities.operating_system import OperatingSystem
 from utilities.config import Config
@@ -16,12 +15,6 @@ class SensorsManager(object):
             sensor = self.sensor_list[key]
             asyncio.ensure_future(sensor.start_monitoring())  
      
-        pass
-
-    def stop_monitoring(self):
-        for key in self.sensor_list:
-            sensor = self.sensor_list[key]
-            sensor.stop_monitoring()
         pass
 
     def register_one(self, sensor_name, sensor):
@@ -44,6 +37,11 @@ class SensorsManager(object):
             self.register_one("WaterLevel", water_level_sensor)
             pass
 
-   
+    def cleanup(self):
+        for key in self.sensor_list:
+            sensor = self.sensor_list[key]
+            sensor.stop_monitoring()
+
+        pass
 
 

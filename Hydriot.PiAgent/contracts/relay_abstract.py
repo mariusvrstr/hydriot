@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod ## abstract module
 
 class RelayAbstract(ABC):
     _name = "N/A"
@@ -10,9 +11,11 @@ class RelayAbstract(ABC):
         
         if (default_on_state):
             self.switch_on()
+        
+        self.sync_status()
     
     def is_switched_on(self):
-        return self._current_on_state  
+        return self._current_on_state
 
     def stop_sync(self):
         self._is_monitoring = False   
@@ -27,31 +30,25 @@ class RelayAbstract(ABC):
 
     ## Ensure expected state is = to current state
     def sync_status(self): 
-        actual_on_state = _check_if_switched_on()
+        actual_on_state = self._check_if_switched_on()    
 
-        if _current_on_state == actual_on_state:
+        if self._current_on_state == actual_on_state:
             pass
-        elif _current_on_state and (actual_on_state == False):
+        elif self._current_on_state and (actual_on_state == False):
             print('Warning! Relay is out of sync - Switching ON')
             self.switch_on()
-        elif (_current_on_state == False) and actual_on_state:
+        elif (self._current_on_state == False) and actual_on_state:
             print('Warning! Relay is out of sync - Switching OFF')
             self.switch_off()
         else:
             pass
     
     def switch_on(self):        
-        if _is_monitoring == False:
-            self.start_sync()
-
-        self._switch_relay_on()
+        self._switch_relay_on()     
         pass
 
     def switch_off(self): 
-        self._switch_relay_off()
-
-        if _is_monitoring:
-            self.stop_sync()       
+        self._switch_relay_off()               
         pass
 
     @abstractmethod
@@ -65,3 +62,4 @@ class RelayAbstract(ABC):
 
     @abstractmethod
     def is_available(self): raise NotImplementedError
+
