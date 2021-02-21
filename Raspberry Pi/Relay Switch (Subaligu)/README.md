@@ -1,7 +1,7 @@
 # Relay switch #
 Relay switches allows you to switch on/off electronic devices that are externally powered
 
-![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/Relay%20Switch%20(Subaligu)/_resources/relay_switch.jpg)
+![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/Relay%20Switch%20(Subaligu)/_resources/relay_switch_small.jpg)
 
 In essence, you can modify a GPIO pin to be an output and then Low (3.3v) or High (5v). The relay switch interprits the changes to high as ON and low as OFF.
 
