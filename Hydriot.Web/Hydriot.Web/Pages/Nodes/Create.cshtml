@@ -1,0 +1,60 @@
+﻿@page
+@model Hydriot.Web.Pages.Nodes.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Node</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Node.DeviceName" class="control-label"></label>
+                <input asp-for="Node.DeviceName" class="form-control" />
+                <span asp-validation-for="Node.DeviceName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Node.DeviceId" class="control-label"></label>
+                <input asp-for="Node.DeviceId" class="form-control" />
+                <span asp-validation-for="Node.DeviceId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Node.RegisteredDate" class="control-label"></label>
+                <input asp-for="Node.RegisteredDate" class="form-control" />
+                <span asp-validation-for="Node.RegisteredDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Node.LastConnected" class="control-label"></label>
+                <input asp-for="Node.LastConnected" class="form-control" />
+                <span asp-validation-for="Node.LastConnected" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Node.IsEnabled" /> @Html.DisplayNameFor(model => model.Node.IsEnabled)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Node.IsDeleted" /> @Html.DisplayNameFor(model => model.Node.IsDeleted)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

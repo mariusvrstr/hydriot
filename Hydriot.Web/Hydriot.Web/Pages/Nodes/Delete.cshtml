@@ -1,0 +1,59 @@
+﻿@page
+@model Hydriot.Web.Pages.Nodes.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Node</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Node.DeviceName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Node.DeviceName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Node.DeviceId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Node.DeviceId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Node.RegisteredDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Node.RegisteredDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Node.LastConnected)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Node.LastConnected)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Node.IsEnabled)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Node.IsEnabled)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Node.IsDeleted)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Node.IsDeleted)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Node.Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>
