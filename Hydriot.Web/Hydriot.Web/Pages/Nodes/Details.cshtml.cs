@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Hydriot.Web.Data;
 using Hydriot.Web.Data.Entities;
+using Hydriot.Web.Data.Repositories;
 
 namespace Hydriot.Web.Pages.Nodes
 {
@@ -28,7 +29,8 @@ namespace Hydriot.Web.Pages.Nodes
                 return NotFound();
             }
 
-            Node = await _context.Nodes.FirstOrDefaultAsync(m => m.Id == id);
+            var nodesRepo = new NodeRepository(_context);
+            Node = nodesRepo.GetById(id.Value);
 
             if (Node == null)
             {

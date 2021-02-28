@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Hydriot.Web.Data.Contracts;
 
 namespace Hydriot.Web.Data.Entities
 {
-    public class Node
+    public class Node : IEntity
     {
         public Guid Id { get; set; }
 
@@ -20,6 +18,5 @@ namespace Hydriot.Web.Data.Entities
         public bool IsEnabled { get; set; }
 
         public bool IsDeleted { get; set; }
-
     }
 }

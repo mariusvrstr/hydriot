@@ -48,6 +48,8 @@ namespace Hydriot.Web.Pages.Nodes
                 return Page();
             }
 
+            //TODO: FIgure out how to do this state tracking over the generic repository with pettern
+
             _context.Attach(Node).State = EntityState.Modified;
 
             try

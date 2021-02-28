@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Hydriot.Web.Data;
 using Hydriot.Web.Data.Entities;
+using Hydriot.Web.Data.Repositories;
 
 namespace Hydriot.Web.Pages.Nodes
 {
@@ -45,13 +46,11 @@ namespace Hydriot.Web.Pages.Nodes
                 return NotFound();
             }
 
-            Node = await _context.Nodes.FindAsync(id);
+            var nodesRepo = new NodeRepository(_context);
+            nodesRepo.Remove(id.Value);
+            nodesRepo.Save();
 
-            if (Node != null)
-            {
-                _context.Nodes.Remove(Node);
-                await _context.SaveChangesAsync();
-            }
+            // TODO: Update repo to async
 
             return RedirectToPage("./Index");
         }

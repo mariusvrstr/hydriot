@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Hydriot.Web.Data;
 using Hydriot.Web.Data.Entities;
+using Hydriot.Web.Data.Repositories;
 
 namespace Hydriot.Web.Pages.Nodes
 {
@@ -35,8 +36,13 @@ namespace Hydriot.Web.Pages.Nodes
                 return Page();
             }
 
-            _context.Nodes.Add(Node);
-            await _context.SaveChangesAsync();
+            var nodesRepo = new NodeRepository(_context);
+            nodesRepo.Add(Node);
+
+            //TODO: Add async save to repo
+            //await _context.SaveChangesAsync();
+
+            nodesRepo.Save();
 
             return RedirectToPage("./Index");
         }
