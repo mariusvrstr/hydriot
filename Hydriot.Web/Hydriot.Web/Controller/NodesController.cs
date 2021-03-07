@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Hydriot.Web.Data;
 using Hydriot.Web.Data.Entities;
 
-namespace Hydriot.Web.wwwroot
+namespace Hydriot.Web.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
