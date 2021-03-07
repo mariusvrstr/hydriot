@@ -9,6 +9,9 @@ config.ini
 # C extensions
 *.so
 
+# Generated Web API controller
+Hydriot.Web.xml
+
 # Distribution / packaging
 .Python
 build/
