@@ -18,6 +18,8 @@ using System.Reflection;
 using Microsoft.AspNetCore.Authentication;
 using Hydriot.Web.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Hydriot.Web.Custom;
+using System.Text.Json.Serialization;
 
 namespace Hydriot.Web
 {
@@ -52,7 +54,7 @@ namespace Hydriot.Web
                 });
 
             services.AddRazorPages();
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
             services.AddSwaggerGen(c =>
             {
@@ -69,6 +71,8 @@ namespace Hydriot.Web
                         Url = new Uri("https://twitter.com/marius_vrstr"),
                     }
                 });
+
+                c.SchemaFilter<EnumSchemaFilter>();
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -91,6 +95,8 @@ namespace Hydriot.Web
                 app.UseHsts();
             }
 
+          
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -105,12 +111,16 @@ namespace Hydriot.Web
                 endpoints.MapControllers();
             });
 
-            app.UseSwagger();
+            app.UseSwagger(c =>
+            {
+            });
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hydriot v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hydriot v1");     
+               
             });
+
         }
     }
 }
