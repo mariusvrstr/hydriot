@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 using Microsoft.OpenApi.Models;
 using System.IO;
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication;
+using Hydriot.Web.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Hydriot.Web
 {
@@ -38,6 +41,16 @@ namespace Hydriot.Web
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services
+               .AddAuthentication()
+               .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", options => { });
+
+            services
+                .AddAuthorization(options =>
+                {
+                    options.AddPolicy("BasicAuthentication", new AuthorizationPolicyBuilder("BasicAuthentication").RequireAuthenticatedUser().Build());
+                });
+
             services.AddRazorPages();
             services.AddControllers();
 
@@ -46,14 +59,14 @@ namespace Hydriot.Web
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "ToDo API",
-                    Description = "A simple example ASP.NET Core Web API",
-                    TermsOfService = new Uri("https://example.com/terms"),
+                    Title = "Hydriot API Documentation",
+                    Description = "This will show you how to register nodes and update sensor readings",
+                    //TermsOfService = new Uri("https://example.com/terms"),       
                     Contact = new OpenApiContact
                     {
-                        Name = "Shayne Boyer",
+                        Name = "Marius Vorster",
                         Email = string.Empty,
-                        Url = new Uri("https://twitter.com/spboyer"),
+                        Url = new Uri("https://twitter.com/marius_vrstr"),
                     }
                 });
 
@@ -96,7 +109,7 @@ namespace Hydriot.Web
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hydriot v1");
             });
         }
     }

@@ -1,4 +1,5 @@
-﻿using Hydriot.Web.Data;
+﻿using Hydriot.Web.Authentication;
+using Hydriot.Web.Data;
 using Hydriot.Web.Data.Entities;
 using Hydriot.Web.Data.Repositories;
 using Hydriot.Web.Models;
@@ -25,6 +26,7 @@ namespace Hydriot.Web.Controller
 
 
         [HttpGet("{nodeId}")]
+        [BasicAuthorization]
         public ActionResult<Node> GetNode(Guid nodeId)
         {
             var node = _nodesRepo.GetById(nodeId);
@@ -38,6 +40,7 @@ namespace Hydriot.Web.Controller
         }
 
         [HttpGet("GetNodeSensorData/{nodeId}")]
+        [BasicAuthorization]
         public ActionResult<NodeData> GetNodeSensorData(Guid nodeId)
         {
             var node = _nodesRepo.GetById(nodeId);
@@ -53,6 +56,7 @@ namespace Hydriot.Web.Controller
         }
 
         [HttpPost]
+        [BasicAuthorization]
         public ActionResult<Guid> RegisterNewNode([FromBody] string name)
         {
             // Get the underlying account
@@ -69,6 +73,7 @@ namespace Hydriot.Web.Controller
 
 
         [HttpPut("UpdateNodeSensors/{nodeId}")]
+        [BasicAuthorization]
         public ActionResult<NodeData> UpdateNodeSensors(Guid nodeId, [FromBody] IEnumerable<SensorData> sensors)
         {
             var foundNode = _nodesRepo.GetById(nodeId);
