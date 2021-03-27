@@ -32,7 +32,17 @@ class TDSSensor(SensorAbstract):
         self.ads1115 = ADS1115()
 
     def is_available(self): 
-        return True
+        reading = -1
+
+        try:
+            reading = self._read_implimentation()
+        except:
+            return False
+                
+        if reading > -1:
+            return True
+        
+        return False
 
     def _read_implimentation(self):
 
