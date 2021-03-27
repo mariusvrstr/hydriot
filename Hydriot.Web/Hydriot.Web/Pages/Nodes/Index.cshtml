@@ -1,0 +1,67 @@
+﻿@page
+@model Hydriot.Web.Pages.Nodes.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>These are the registered nodes for your account</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Node[0].DeviceName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Node[0].DeviceId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Node[0].RegisteredDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Node[0].LastConnected)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Node[0].IsEnabled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Node[0].IsDeleted)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Node) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeviceName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeviceId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegisteredDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastConnected)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsEnabled)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDeleted)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
