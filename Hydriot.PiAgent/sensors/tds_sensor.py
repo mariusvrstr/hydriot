@@ -1,7 +1,9 @@
-from contracts.sensor_abstract import SensorAbstract
-from utilities.maths import Math
+import sys
 import time
 import os
+
+from contracts.sensor_abstract import SensorAbstract
+from utilities.maths import Math
 from sensors.resources.CQRobot_ADS1115 import ADS1115
 
 class TDSSensorStub(SensorAbstract):
@@ -37,10 +39,12 @@ class TDSSensor(SensorAbstract):
         try:
             reading = self._read_implimentation()
         except:
+            e = sys.exc_info()[0]
+            print(f"Failed to read TDS. Error Details >> {e}")
             return False
-                
-        if reading > -1:
-            return True
+        finally:
+            if reading > -1:
+                return True        
         
         return False
 
