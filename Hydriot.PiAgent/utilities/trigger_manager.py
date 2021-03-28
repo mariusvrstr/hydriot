@@ -12,9 +12,11 @@ class TriggerManager(object):
 
     def register_available(self):
         light_relay = self.container.light_relay_factory()
+        pump_relay = self.container.pump_relay_factory()
 
         if light_relay.is_available():
             self.register_one("Light Relay", light_relay)
+            self.register_one("Pump Relay", pump_relay)
             pass
         pass
 

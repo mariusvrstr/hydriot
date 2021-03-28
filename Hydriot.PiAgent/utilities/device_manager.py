@@ -29,6 +29,7 @@ class DeviceManager(object):
                     summary += "[ok]" if sensor.is_healthy() else "[Unhealthy]"    
                     print(summary)          
 
+                print()
                 print(">>> Registered Triggers <<<")
                 for key in trigger_manager.trigger_list:
                     trigger = trigger_manager.trigger_list[key]
