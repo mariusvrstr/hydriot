@@ -7,7 +7,7 @@ import asyncio
 
 class DeviceManager(object):
 
-    async def start_device_dashboard(self, sensor_manager, trigger_manager):
+    async def start_device_dashboard(self, sensor_manager, trigger_manager, integration_adapter):
         toggel = False
 
         try:
@@ -25,7 +25,7 @@ class DeviceManager(object):
                     sensor = sensor_manager.sensor_list[key]
                     age_in_seconds = (datetime.now() - sensor.get_last_read_time()).total_seconds()
 
-                    summary = f"{key} latest value is {sensor.get_latest_value()} from {round(age_in_seconds, 0)} seconds ago "
+                    summary = f"{key} latest value is [{sensor.get_latest_value()}] from [{round(age_in_seconds, 0)}] seconds ago "
                     summary += "[ok]" if sensor.is_healthy() else "[Unhealthy]"    
                     print(summary)          
 
@@ -40,6 +40,12 @@ class DeviceManager(object):
                     summary = f"{key} is switched [{status}]" # get last changed time
                     ##summary += "[ok]" if sensor.is_healthy() else "[Unhealthy]"    
                     print(summary)       
+
+                print()
+                print(">>> Integration Status <<<")
+                status = "Connected" if integration_adapter.previous_integration_success else "Disconnected"
+                last_update = "N/A" if integration_adapter.last_integration_update == None else integration_adapter.last_integration_update
+                print(f"Connection status: [{status}] last updated [{last_update}]")
 
                 print()
                 if Config().get_enable_sim():
