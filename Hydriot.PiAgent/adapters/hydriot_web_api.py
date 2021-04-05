@@ -1,9 +1,11 @@
 import requests
 import json
 import sys
+import time
 
 from datetime import date
 from utilities.config import Config
+from utilities.operating_system import OperatingSystem
 
 class WebClient(object):
     base_url = "n/a"
@@ -28,16 +30,16 @@ class WebClient(object):
         return json.loads(self.get_json_text(obj))
 
     def transform_sensor_data(self, sensor_list):
-        # date.today()
+        data = []
 
-        data = [
-            {
-                "name": "Water Level",
+        for key in sensor_list:
+            sensor = sensor_list[key]
+            data.append({
+                "name": sensor._name,
                 "type": 1,
-                "stringValue": "0",
-                "readTime": "2021-03-13T20:03:29.605Z",
-            }
-        ]
+                "stringValue": str(sensor.get_latest_value()),
+                "readTime": sensor.get_last_read_time().strftime("%m/%d/%Y, %H:%M:%S")
+            })         
 
         return data
     
@@ -51,16 +53,21 @@ class WebClient(object):
         success = False
 
         try:
+            OperatingSystem().clear_console()
+            print("Updating server over API...")
+
             # TODO: Remove verify=False before deploying to production (Local Testing Only)
-            print("Update sensors")
-            requests.put(url, json=data, auth=(username, password), verify=False) 
+            requests.put(url, json=data, auth=(username, password), timeout=8, verify=False)
 
-            success = True
-        except:
-            e = sys.exc_info()[0]
-            print(f"Failed to update sensor reading. Error details >> {e}")
+            if response.status_code == 200:
+                success = True
 
-        # finally:
-             # client.show_result_details(response)
+        except requests.exceptions.RequestException as e:  # This is the correct syntax
+            OperatingSystem().clear_console()
+            print(f"Failed to update sensor readings. Error details >> {e}")
+            # Sleep for 2s so that message is visible
+            time.sleep(2)
+
+            #raise SystemExit(e)           
 
         return success

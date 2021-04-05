@@ -35,6 +35,7 @@ def main():
 
     try:
         loop.run_until_complete(initialize(sensors_manager, trigger_manager, integration_adapter))
+    
     except KeyboardInterrupt:
         sensors_manager.cleanup()
         trigger_manager.cleanup()

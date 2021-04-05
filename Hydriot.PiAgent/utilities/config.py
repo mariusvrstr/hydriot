@@ -27,6 +27,7 @@ class Config(object):
             config.set(self.integration_api_section, "node_id", "508728DE-F6AC-48C9-9D12-F18E0674A70A") # TODO: replace with n/a
             config.set(self.integration_api_section, "user", "****")
             config.set(self.integration_api_section, "pass", "****")
+            config.set(self.integration_api_section, "enabled", "false")
            
             config.write(cfgfile)
             cfgfile.close()
@@ -53,3 +54,6 @@ class Config(object):
 
     def get_integration_api_password(self):
         return self.get_key_value(self.integration_api_section, "pass")
+
+    def get_integration_enabled(self):
+        return self.get_key_value(self.integration_api_section, "enabled") == "true"

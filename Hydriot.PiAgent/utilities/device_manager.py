@@ -56,7 +56,8 @@ class DeviceManager(object):
                 print("----------------------------------------------------")    
                 footer = "*Press Cntr+C to exit monitoring "
                 footer += "[-]" if toggel else "[|]"
-                print(footer)            
+                print(footer)
+                print()
 
                 await asyncio.sleep(2)
 

@@ -1,5 +1,5 @@
 import asyncio
-from datetime import date
+from datetime import datetime
 from adapters.hydriot_web_api import WebClient
 from utilities.config import Config
 
@@ -22,17 +22,21 @@ class IntegrationAdapter(object):
             pass
 
         while self._is_monitoring:
+            await asyncio.sleep(self._frequency_in_seconds)
+
+            if not Config().get_integration_enabled():                
+                continue
+
             # Send updated sensor data
             client = WebClient()
             success = client.upload_sensor_readings(self._sensors, self._node_id)
 
             if success:
                 self.previous_integration_success = True
-                self.last_integration_update = date.today()
+                self.last_integration_update = datetime.now()
             else:
-                self.previous_integration_success = False
-
-            await asyncio.sleep(self._frequency_in_seconds)            
+                self.previous_integration_success = False          
+                          
         pass
 
     def stop_monitoring(self):
