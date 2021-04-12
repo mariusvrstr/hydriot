@@ -18,7 +18,6 @@ class WaterLevelSensorStub(SensorAbstract):
     def is_available(self):
         return True
 
-
 class WaterLevelSensor(SensorAbstract):
 
     def __init__(self):

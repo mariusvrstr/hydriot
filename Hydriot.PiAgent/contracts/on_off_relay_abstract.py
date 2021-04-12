@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod ## abstract module
 
-class RelayAbstract(ABC):
+class OnOffRelayAbstract(ABC):
     _name = "N/A"
     _current_on_state = False
     _is_monitoring = False

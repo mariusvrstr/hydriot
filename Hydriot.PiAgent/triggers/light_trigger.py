@@ -1,13 +1,12 @@
-from contracts.relay_abstract import RelayAbstract
+from contracts.on_off_relay_abstract import OnOffRelayAbstract
 import RPi.GPIO as GPIO
 import time
 
-
-class LightRelayStub(RelayAbstract):
+class LightRelayStub(OnOffRelayAbstract):
     _current_on_state = False
 
     def __init__(self):
-        RelayAbstract.__init__(self, "Light Switch", False)
+        OnOffRelayAbstract.__init__(self, "Light Switch", False)
 
     def _switch_relay_on(self):
         self._current_on_state = True
@@ -23,14 +22,14 @@ class LightRelayStub(RelayAbstract):
     def is_available(self): 
         return True
 
-class LightRelay(RelayAbstract):
+class LightRelay(OnOffRelayAbstract):
     relay_pin_pos = 32 # Which PIN is used on the Pi
     is_low_volt_relay = True # Use this when connected to 3.3V source (If it does switch off use this and switch to 3.3V)
 
     def __init__(self):        
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.relay_pin_pos, GPIO.OUT) # GPIO Assign mode
-        RelayAbstract.__init__(self, "Light Switch", True) # Start either ON or OFF
+        OnOffRelayAbstract.__init__(self, "Light Switch", True) # Start either ON or OFF
 
     def _switch_relay_on(self):
         self._current_on_state = True

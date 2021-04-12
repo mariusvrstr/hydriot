@@ -7,7 +7,16 @@ import asyncio
 
 class DeviceManager(object):
 
-    async def start_device_dashboard(self, sensor_manager, trigger_manager, integration_adapter):
+    def get_sensor_summary(self, sensor_summary):
+        age_in_seconds = "N/A" if sensor_summary.last_execution is None else round((datetime.now() - sensor_summary.last_execution).total_seconds(), 0)
+        latest_value = "N/A" if sensor_summary.latest_value is None else sensor_summary.latest_value
+
+        summary = f"{sensor_summary.name} latest value is [{latest_value}] from [{age_in_seconds}] seconds ago "
+        summary += "[ok]" if sensor_summary.is_healthy() else "[Unhealthy]"    
+
+        return summary
+
+    async def start_device_dashboard(self, hydriot, trigger_manager, integration_adapter):
         toggel = False
 
         try:
@@ -15,19 +24,16 @@ class DeviceManager(object):
                 toggel = not toggel
 
                 OperatingSystem().clear_console()
-                print("=====================================================")
-                print("==== Available Sensors & Triggers from the Agent ====")
+                print("Hydriot Node")
                 print("=====================================================")
                 print()
 
                 print(">>> Registered Sensors <<<")
-                for key in sensor_manager.sensor_list:
-                    sensor = sensor_manager.sensor_list[key]
-                    age_in_seconds = (datetime.now() - sensor.get_last_read_time()).total_seconds()
 
-                    summary = f"{key} latest value is [{sensor.get_latest_value()}] from [{round(age_in_seconds, 0)}] seconds ago "
-                    summary += "[ok]" if sensor.is_healthy() else "[Unhealthy]"    
-                    print(summary)          
+                if hydriot.tds_sensor is not None:
+                    print(self.get_sensor_summary(hydriot.tds_sensor))
+                if hydriot.water_level_sensor is not None:
+                    print(self.get_sensor_summary(hydriot.water_level_sensor))
 
                 print()
                 print(">>> Registered Triggers <<<")
@@ -49,7 +55,6 @@ class DeviceManager(object):
 
                 print()
                 if Config().get_enable_sim():
-                    print("----------------------------------------------------")
                     print("WARNING! Simulator Mode Enabled")
                     pass
                                 

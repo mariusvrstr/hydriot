@@ -6,44 +6,63 @@
 
 from utilities.config import Config
 from utilities.trigger_manager import TriggerManager
-from utilities.sensors_manager import SensorsManager
 from utilities.operating_system import OperatingSystem
 from utilities.device_manager import DeviceManager
 from utilities.integration_adapter import IntegrationAdapter
+from hydriot import Hydriot
+from utilities.dependency_injection import Container
+
 import time
 import asyncio
 
+class Main():
+    hydriot = None
 
-async def initialize(sensor_manager, trigger_manager, integration_adapter):    
-    sensor_manager.register_available()
-    sensor_manager.start_monitoring()    
+    def __init__(self):
+        self.hydriot = Hydriot()    
+
+    async def boot(self, trigger_manager, integration_adapter):
+        container = Container()
+
+        tds_sensor =  container.tds_factory()
+
+        if tds_sensor.is_available():
+            self.hydriot.set_tds_sensor(tds_sensor.sensor_summary)
+            asyncio.ensure_future(tds_sensor.start_monitoring())
+
+        water_level_sensor =  container.water_level_sensor_factory()
+            
+        if water_level_sensor.is_available():
+            self.hydriot.set_water_level_sensor(water_level_sensor.sensor_summary)
+            asyncio.ensure_future(water_level_sensor.start_monitoring())
     
-    trigger_manager.register_available()
-    device_manager = DeviceManager()
+        trigger_manager.register_available()
+        device_manager = DeviceManager()
 
-    integration_adapter.start_monitoring(sensor_manager.sensor_list)
+        # integration_adapter.start_monitoring(sensor_manager.sensor_list)
 
-    await device_manager.start_device_dashboard(sensor_manager, trigger_manager, integration_adapter) 
+        await device_manager.start_device_dashboard(self.hydriot, trigger_manager, integration_adapter)
+
+    def start(self):
+        #sensors_manager = SensorsManager()
+        trigger_manager = TriggerManager()
+        integration_adapter = IntegrationAdapter(30)
+        
+        loop = asyncio.get_event_loop()
+
+        try:
+            loop.run_until_complete(self.boot(trigger_manager, integration_adapter))
+        
+        except KeyboardInterrupt:
+            hydriot.tds_sensor
+            sensors_manager.cleanup()
+            trigger_manager.cleanup()
+            integration_adapter.cleanup()
+        # finally:
+        # loop.close() # Simulator complains
 
 
-def main():
-    sensors_manager = SensorsManager()
-    trigger_manager = TriggerManager()
-    integration_adapter = IntegrationAdapter(30)
-    
-    loop = asyncio.get_event_loop()
-
-    try:
-        loop.run_until_complete(initialize(sensors_manager, trigger_manager, integration_adapter))
-    
-    except KeyboardInterrupt:
-        sensors_manager.cleanup()
-        trigger_manager.cleanup()
-        integration_adapter.cleanup()
-    # finally:
-       # loop.close() # Simulator complains
-
-main()
+Main().start()
 
 
 

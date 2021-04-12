@@ -19,7 +19,6 @@ class TDSSensorStub(SensorAbstract):
     def is_available(self): 
         return True
 
-
 class TDSSensor(SensorAbstract):
 
     def __init__(self):
