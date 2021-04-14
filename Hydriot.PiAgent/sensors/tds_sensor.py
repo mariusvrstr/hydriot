@@ -2,14 +2,14 @@ import sys
 import time
 import os
 
-from contracts.sensor_abstract import SensorAbstract
 from utilities.maths import Math
+from sensors.sensor_base import SensorBase
 from sensors.resources.CQRobot_ADS1115 import ADS1115
 
-class TDSSensorStub(SensorAbstract):
+class TDSSensorStub(SensorBase):
 
     def __init__(self):
-        SensorAbstract.__init__(self, "Total Dissolvable Solids (TDS) Sensor", 2)
+        SensorBase.__init__(self, "Total Dissolvable Solids (TDS) Sensor", 2)
 
     def _read_implimentation(self):
         ## Stubbed Reading
@@ -19,10 +19,10 @@ class TDSSensorStub(SensorAbstract):
     def is_available(self): 
         return True
 
-class TDSSensor(SensorAbstract):
+class TDSSensor(SensorBase):
 
     def __init__(self):
-        SensorAbstract.__init__(self, "Total Dissolvable Solids (TDS) Sensor", 2)
+        SensorBase.__init__(self, "Total Dissolvable Solids (TDS) Sensor", 2)
 
         self.ADS1115_REG_CONFIG_PGA_6_144V        = 0x00 # 6.144V range = Gain 2/3
         self.ADS1115_REG_CONFIG_PGA_4_096V        = 0x02 # 4.096V range = Gain 1

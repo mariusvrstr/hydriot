@@ -5,65 +5,85 @@
 """
 
 from utilities.config import Config
-from utilities.trigger_manager import TriggerManager
 from utilities.operating_system import OperatingSystem
 from utilities.device_manager import DeviceManager
 from utilities.integration_adapter import IntegrationAdapter
 from hydriot import Hydriot
 from utilities.dependency_injection import Container
+from utilities.operating_system import OperatingSystem
+import RPi.GPIO as GPIO
 
 import time
 import asyncio
+import os
 
 class Main():
     hydriot = None
+    tds_sensor = None
+    water_level_sensor = None
+    
+    light_trigger = None
+    water_pump_trigger = None
 
     def __init__(self):
         self.hydriot = Hydriot()    
 
-    async def boot(self, trigger_manager, integration_adapter):
+    async def boot(self, integration_adapter):
         container = Container()
 
-        tds_sensor =  container.tds_factory()
+        self.tds_sensor =  container.tds_factory()
 
-        if tds_sensor.is_available():
-            self.hydriot.set_tds_sensor(tds_sensor.sensor_summary)
-            asyncio.ensure_future(tds_sensor.start_monitoring())
+        if self.tds_sensor.is_available():
+            self.hydriot.set_tds_sensor(self.tds_sensor.sensor_summary)
+            asyncio.ensure_future(self.tds_sensor.run_schedule())
 
-        water_level_sensor =  container.water_level_sensor_factory()
+        self.water_level_sensor =  container.water_level_sensor_factory()
             
-        if water_level_sensor.is_available():
-            self.hydriot.set_water_level_sensor(water_level_sensor.sensor_summary)
-            asyncio.ensure_future(water_level_sensor.start_monitoring())
+        if self.water_level_sensor.is_available():
+            self.hydriot.set_water_level_sensor(self.water_level_sensor.sensor_summary)
+            asyncio.ensure_future(self.water_level_sensor.run_schedule())
+
+        self.light_trigger = container.light_relay_factory()
+        
+        if self.light_trigger._is_enabled:
+            self.hydriot.set_light_trigger(self.light_trigger)
+
+        self.water_pump_trigger = container.pump_relay_factory()
+        
+        if self.water_pump_trigger._is_enabled:
+            self.hydriot.set_water_pump_trigger(self.water_pump_trigger)
     
-        trigger_manager.register_available()
         device_manager = DeviceManager()
 
         # integration_adapter.start_monitoring(sensor_manager.sensor_list)
 
-        await device_manager.start_device_dashboard(self.hydriot, trigger_manager, integration_adapter)
+        await device_manager.start_device_dashboard(self.hydriot, integration_adapter)
 
     def start(self):
-        #sensors_manager = SensorsManager()
-        trigger_manager = TriggerManager()
+        # sensors_manager = SensorsManager()
+        # trigger_manager = TriggerManager()
         integration_adapter = IntegrationAdapter(30)
         
         loop = asyncio.get_event_loop()
 
         try:
-            loop.run_until_complete(self.boot(trigger_manager, integration_adapter))
+            loop.run_until_complete(self.boot(integration_adapter))
         
         except KeyboardInterrupt:
-            hydriot.tds_sensor
-            sensors_manager.cleanup()
-            trigger_manager.cleanup()
+            OperatingSystem().clear_console()
+            print("Stopping services...")
+
+            self.tds_sensor.stop_schedule()
+            self.water_level_sensor.stop_schedule()
+
+            if Config().get_enable_sim() == False:
+                GPIO.cleanup()
+
             integration_adapter.cleanup()
-        # finally:
-        # loop.close() # Simulator complains
 
 
 Main().start()
-
-
+time.sleep(8) 
+OperatingSystem().clear_console()
 
 

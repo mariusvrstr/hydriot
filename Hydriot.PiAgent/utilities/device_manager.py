@@ -16,7 +16,14 @@ class DeviceManager(object):
 
         return summary
 
-    async def start_device_dashboard(self, hydriot, trigger_manager, integration_adapter):
+    def get_trigger_summary(self, trigger):
+        current_on_status = trigger.check_if_switched_on()
+        status = "On" if current_on_status else "Off"
+        summary = f"{trigger.name} is switched [{status}]"
+        
+        return summary
+
+    async def start_device_dashboard(self, hydriot, integration_adapter):
         toggel = False
 
         try:
@@ -37,15 +44,11 @@ class DeviceManager(object):
 
                 print()
                 print(">>> Registered Triggers <<<")
-                for key in trigger_manager.trigger_list:
-                    trigger = trigger_manager.trigger_list[key]
-                    current_on_status = trigger.is_switched_on()
 
-                    status = "On" if current_on_status else "Off"
-
-                    summary = f"{key} is switched [{status}]" # get last changed time
-                    ##summary += "[ok]" if sensor.is_healthy() else "[Unhealthy]"    
-                    print(summary)       
+                if hydriot.light_trigger is not None:
+                    print(self.get_trigger_summary(hydriot.light_trigger))
+                if hydriot.water_pump_trigger is not None:
+                    print(self.get_trigger_summary(hydriot.water_pump_trigger)) 
 
                 print()
                 print(">>> Integration Status <<<")

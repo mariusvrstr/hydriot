@@ -1,24 +1,24 @@
-from contracts.on_off_relay_abstract import OnOffRelayAbstract
+from triggers.on_off_relay_abstract import OnOffRelayAbstract
 import RPi.GPIO as GPIO
 import time
 
 
 class PumpRelayStub(OnOffRelayAbstract):
-    _current_on_state = False
+    _actual_on_state = False
 
     def __init__(self):
-        OnOffRelayAbstract.__init__(self, "Pump Switch", False)
+        OnOffRelayAbstract.__init__(self, "Pump Switch", False, True)
 
     def _switch_relay_on(self):
-        self._current_on_state = True
+        self._actual_on_state = True
         pass
     
     def _switch_relay_off(self): 
-        self._current_on_state = False
+        self._actual_on_state = False
         pass
 
     def _check_if_switched_on(self): 
-        return self._current_on_state
+        return self._actual_on_state
 
     def is_available(self): 
         return True
@@ -30,7 +30,7 @@ class PumpRelay(OnOffRelayAbstract):
     def __init__(self):        
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.relay_pin_pos, GPIO.OUT) # GPIO Assign mode
-        OnOffRelayAbstract.__init__(self, "Pump Switch", True) # Start either ON or OFF
+        OnOffRelayAbstract.__init__(self, "Pump Switch", True, True) # Start either ON or OFF
 
     def _switch_relay_on(self):
         self._current_on_state = True

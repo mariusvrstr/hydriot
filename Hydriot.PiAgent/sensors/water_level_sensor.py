@@ -3,12 +3,12 @@ import wiringpi as GPIO
 import time
 import os
 
-from contracts.sensor_abstract import SensorAbstract
+from sensors.sensor_base import SensorBase
 
-class WaterLevelSensorStub(SensorAbstract):
+class WaterLevelSensorStub(SensorBase):
 
     def __init__(self, ):
-        SensorAbstract.__init__(self, "Water Level Sensor", 1)
+        SensorBase.__init__(self, "Water Level Sensor", 1)
 
     def _read_implimentation(self):
         ## Stubbed Reading
@@ -18,10 +18,10 @@ class WaterLevelSensorStub(SensorAbstract):
     def is_available(self):
         return True
 
-class WaterLevelSensor(SensorAbstract):
+class WaterLevelSensor(SensorBase):
 
     def __init__(self):
-        SensorAbstract.__init__(self, "Water Level Sensor", 1)
+        SensorBase.__init__(self, "Water Level Sensor", 1)
         GPIO.wiringPiSetup()
     
     def is_available(self):
