@@ -71,7 +71,6 @@ class Main():
         
         except KeyboardInterrupt:
             OperatingSystem().clear_console()
-            print("Stopping services...")
 
             self.tds_sensor.stop_schedule()
             self.water_level_sensor.stop_schedule()
@@ -80,10 +79,10 @@ class Main():
                 GPIO.cleanup()
 
             integration_adapter.cleanup()
-
+            # TODO: asynco wait to exit loops
+            time.sleep(10) 
 
 Main().start()
-time.sleep(8) 
 OperatingSystem().clear_console()
 
 

@@ -1,4 +1,3 @@
-from contracts.sensor_summary import SensorSummary
 
 class Hydriot():
     tds_sensor = None
