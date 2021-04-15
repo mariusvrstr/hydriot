@@ -1,7 +1,7 @@
 import asyncio
 from datetime import datetime
 from adapters.hydriot_web_api import WebClient
-from utilities.config import Config
+from utilities.app_config import AppConfig
 
 class IntegrationAdapter(object):
     _frequency_in_seconds = 1    
@@ -13,7 +13,7 @@ class IntegrationAdapter(object):
 
     def __init__(self, update_frequency):
         self._frequency_in_seconds = update_frequency
-        self._node_id = Config().get_integration_node_id()
+        self._node_id = AppConfig().get_integration_node_id()
     
     async def register_integration(self):
         self._is_monitoring = True
@@ -24,7 +24,7 @@ class IntegrationAdapter(object):
         while self._is_monitoring:
             await asyncio.sleep(self._frequency_in_seconds)
 
-            if not Config().get_integration_enabled():                
+            if not AppConfig().get_integration_enabled():                
                 continue
 
             # Send updated sensor data

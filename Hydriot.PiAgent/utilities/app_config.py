@@ -1,8 +1,8 @@
 import os
 import configparser
-from utilities.operating_system import OperatingSystem
+import platform
 
-class Config(object):
+class AppConfig(object):
     _configfile_name = "config.ini"
 
     # sections
@@ -19,7 +19,7 @@ class Config(object):
             config = configparser.ConfigParser()
 
             config.add_section(self.environment_section)
-            config.set(self.environment_section, "os", OperatingSystem().name())
+            config.set(self.environment_section, "os", platform.system())
             config.set(self.environment_section, "enable_sim", "true")
 
             config.add_section(self.integration_api_section)

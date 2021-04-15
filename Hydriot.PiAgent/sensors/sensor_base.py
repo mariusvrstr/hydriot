@@ -1,13 +1,6 @@
-from datetime import datetime
-from abc import ABC, abstractmethod
-from utilities.operating_system import OperatingSystem
-from utilities.config import Config
 from common.sensor_summary import SensorSummary
 from common.scheduling_abstract import SchedulingAbstract
-
-import time
-import os
-import asyncio
+from abc import ABC, abstractmethod ## abstract module
 
 class SensorBase(SchedulingAbstract):    
     sensor_summary = None    

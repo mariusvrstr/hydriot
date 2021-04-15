@@ -4,8 +4,8 @@ import sys
 import time
 
 from datetime import date
-from utilities.config import Config
-from utilities.operating_system import OperatingSystem
+from utilities.app_config import AppConfig
+from utilities.console_manager import ConsoleManager
 
 class WebClient(object):
     base_url = "n/a"
@@ -47,8 +47,8 @@ class WebClient(object):
         url = f"{self.base_url}/node/UpdateNodeSensors/{node_id}"
         data = self.transform_sensor_data(sensor_data)
 
-        username = Config().get_integration_api_username()
-        password = Config().get_integration_api_password()
+        username = AppConfig().get_integration_api_username()
+        password = AppConfig().get_integration_api_password()
 
         success = False
 

@@ -4,13 +4,11 @@
 ============================================================
 """
 
-from utilities.config import Config
-from utilities.operating_system import OperatingSystem
-from utilities.device_manager import DeviceManager
+from utilities.app_config import AppConfig
+from utilities.console_manager import ConsoleManager
 from utilities.integration_adapter import IntegrationAdapter
 from hydriot import Hydriot
 from utilities.dependency_injection import Container
-from utilities.operating_system import OperatingSystem
 import RPi.GPIO as GPIO
 
 import time
@@ -53,11 +51,11 @@ class Main():
         if self.water_pump_trigger._is_enabled:
             self.hydriot.set_water_pump_trigger(self.water_pump_trigger)
     
-        device_manager = DeviceManager()
+        console_manager = ConsoleManager()
 
         # integration_adapter.start_monitoring(sensor_manager.sensor_list)
 
-        await device_manager.start_device_dashboard(self.hydriot, integration_adapter)
+        await console_manager.start_device_dashboard(self.hydriot, integration_adapter)
 
     def start(self):
         # sensors_manager = SensorsManager()
@@ -70,12 +68,12 @@ class Main():
             loop.run_until_complete(self.boot(integration_adapter))
         
         except KeyboardInterrupt:
-            OperatingSystem().clear_console()
+            ConsoleManager().clear_console()
 
             self.tds_sensor.stop_schedule()
             self.water_level_sensor.stop_schedule()
 
-            if Config().get_enable_sim() == False:
+            if AppConfig().get_enable_sim() == False:
                 GPIO.cleanup()
 
             integration_adapter.cleanup()
@@ -83,6 +81,6 @@ class Main():
             time.sleep(10) 
 
 Main().start()
-OperatingSystem().clear_console()
+ConsoleManager().clear_console()
 
 

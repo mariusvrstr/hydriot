@@ -1,11 +1,24 @@
-from utilities.operating_system import OperatingSystem
-from utilities.config import Config
+from utilities.app_config import AppConfig
 from datetime import datetime
 import RPi.GPIO as GPIO
 import time
 import asyncio
+import platform
+import os
 
-class DeviceManager(object):
+class ConsoleManager(object):
+
+    def name(self):
+        return platform.system()
+
+    def clear_console(self):
+        if self.name() == 'Windows':
+            os.system('cls')
+        elif self.name() == 'Linux':
+            os.system('clear')
+        else:
+            print('Unknown Operating System')
+        pass
 
     def get_sensor_summary(self, sensor_summary):
         age_in_seconds = "N/A" if sensor_summary.last_execution is None else round((datetime.now() - sensor_summary.last_execution).total_seconds(), 0)
@@ -30,7 +43,7 @@ class DeviceManager(object):
             while True:
                 toggel = not toggel
 
-                OperatingSystem().clear_console()
+                ConsoleManager().clear_console()
                 print("Hydriot Node")
                 print("=====================================================")
                 print()
@@ -57,7 +70,7 @@ class DeviceManager(object):
                 print(f"Connection status: [{status}] last updated [{last_update}]")
 
                 print()
-                if Config().get_enable_sim():
+                if AppConfig().get_enable_sim():
                     print("WARNING! Simulator Mode Enabled")
                     pass
                                 
