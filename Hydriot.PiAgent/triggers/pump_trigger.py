@@ -2,7 +2,6 @@ from triggers.on_off_relay_abstract import OnOffRelayAbstract
 import RPi.GPIO as GPIO
 import time
 
-
 class PumpRelayStub(OnOffRelayAbstract):
     _actual_on_state = False
 

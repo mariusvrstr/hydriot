@@ -58,8 +58,6 @@ class Main():
         await console_manager.start_device_dashboard(self.hydriot, integration_adapter)
 
     def start(self):
-        # sensors_manager = SensorsManager()
-        # trigger_manager = TriggerManager()
         integration_adapter = IntegrationAdapter(30)
         
         loop = asyncio.get_event_loop()
