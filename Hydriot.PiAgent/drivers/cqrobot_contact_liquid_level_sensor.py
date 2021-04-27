@@ -1,20 +1,23 @@
 import wiringpi as GPIO
 from drivers.driver_base import DriverBase
+from utilities.pin_converter import PinMapper
 
 ## Manufacturer Source
 ## http://www.cqrobot.wiki/index.php/Liquid_Level_Sensor
 
 class CQRobotContactLiquidLevelSensorDriver(DriverBase):
+    wiringpi_pin = None
 
-    def __init__(self):
+    def __init__(self, gpio_pin):
         DriverBase.__init__(self)
+        self.wiringpi_pin = PinMapper().gpio_to_wiringpi(gpio_pin)
         pass    
 
     def initialize(self):
         GPIO.wiringPiSetup()
 
     def read_value(self):
-        reading = GPIO.digitalRead(1)
+        reading = GPIO.digitalRead(self.wiringpi_pin)
         return reading
 
     def is_available(self):

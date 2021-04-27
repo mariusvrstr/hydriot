@@ -2,6 +2,7 @@ import sys
 import time
 import os
 
+from utilities.pin_converter import GPIO
 from sensors.sensor_base import SensorBase
 from drivers.cqrobot_contact_liquid_level_sensor import CQRobotContactLiquidLevelSensorDriver
 
@@ -21,7 +22,7 @@ class WaterLevelSensor(SensorBase):
 
     def __init__(self):
         # TODO: Move this to DI configuration
-        self.driver = CQRobotContactLiquidLevelSensorDriver()
+        self.driver = CQRobotContactLiquidLevelSensorDriver(GPIO.GPIO018)
         SensorBase.__init__(self, self.driver, "Water Level Sensor", 1)
 
 

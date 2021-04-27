@@ -3,15 +3,20 @@ import time
 import os
 
 from drivers.driver_base import DriverBase
-from drivers.cqrobot_analog_to_digital_converter import ADS1115
+from drivers.cqrobot_analog_to_digital_converter import Channel, ConverterMode, ADS1115
 
 ## Manufacturer Source
 ## http://www.cqrobot.wiki/index.php/TDS_Meter_Sensor
 
 class CQRobotTotalDissolvedSolidsSensorDriver(DriverBase):
+    converter_mode = None
+    channel = None
 
     def __init__(self):
-        DriverBase.__init__(self)
+        #Set the IIC address (0X48 or 0X49 based on switch on ADC Module)
+        self.converter_mode = ConverterMode.x48
+        self.channel = Channel.A2
+        DriverBase.__init__(self)        
         pass    
 
     def initialize(self):
@@ -23,19 +28,18 @@ class CQRobotTotalDissolvedSolidsSensorDriver(DriverBase):
         self.ADS1115_REG_CONFIG_PGA_0_512V        = 0x08 # 0.512V range = Gain 8
         self.ADS1115_REG_CONFIG_PGA_0_256V        = 0x0A # 0.256V range = Gain 16
         self.ads1115 = ADS1115()
-
-    def read_value(self):
-        #Set the IIC address (0X48 or 0X49 based on switch on ADC Module)
-        self.ads1115.setAddr_ADS1115(0x48)
+        
+        if self.converter_mode == 48:
+            self.ads1115.setAddr_ADS1115(0x48)
+        elif self.converter_mode == 47:
+            self.ads1115.setAddr_ADS1115(0x47)
 
         #Sets the gain and input voltage range.
         self.ads1115.setGain(self.ADS1115_REG_CONFIG_PGA_6_144V)
 
-        #Get the Digital Value of Analog of selected channel (4 Channels on ADC Module: 0 to 3)
-        adc1 = self.ads1115.readVoltage(2)
-        # Clear previous values and set heading
 
-        tds = self.ads1115.readValue()
+    def read_value(self):
+        tds = self.ads1115.readVoltage(self.channel)
         reading = tds['r']
 
         return reading
