@@ -1,7 +1,7 @@
 from datetime import datetime
 
 class SensorSummary():
-    name = False
+    name = None
     last_updated_increment = 0
     last_execution = None
     latest_value = None
