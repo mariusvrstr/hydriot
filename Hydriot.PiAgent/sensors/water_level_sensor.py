@@ -1,45 +1,30 @@
 import sys
-import wiringpi as GPIO
 import time
 import os
 
-from contracts.sensor_abstract import SensorAbstract
+from utilities.pin_converter import GPIO
+from sensors.sensor_base import SensorBase
+from drivers.cqrobot_contact_liquid_level_sensor import CQRobotContactLiquidLevelSensorDriver
 
-class WaterLevelSensorStub(SensorAbstract):
+class WaterLevelSensorStub(SensorBase):
 
     def __init__(self, ):
-        SensorAbstract.__init__(self, "Water Level Sensor", 1)
+        SensorBase.__init__(self, None, "Water Level Sensor", 1)
 
-    def _read_implimentation(self):
-        ## Stubbed Reading
-        reading = 1
-        return reading
+    def read_implimentation(self): # override driver default
+        return 1  ## Stubbed Reading
     
-    def is_available(self):
+    def is_available(self): # override driver default
         return True
 
-
-class WaterLevelSensor(SensorAbstract):
+class WaterLevelSensor(SensorBase):
+    driver = None
 
     def __init__(self):
-        SensorAbstract.__init__(self, "Water Level Sensor", 1)
-        GPIO.wiringPiSetup()
-    
-    def is_available(self):
-        reading = -1
+        # TODO: Move this to DI configuration
+        self.driver = CQRobotContactLiquidLevelSensorDriver(GPIO.GPIO018)
+        SensorBase.__init__(self, self.driver, "Water Level Sensor", 1)
 
-        try:
-            reading = self._read_implimentation()
-        except:
-            e = sys.exc_info()[0]
-            print(f"Failed to read Water Level Sensor. Error Details >> {e}")
-            return False
-        finally:
-            if reading > -1:
-                return True        
+
+
         
-        return False
-
-    def _read_implimentation(self):
-        reading = GPIO.digitalRead(1)
-        return reading

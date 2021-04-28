@@ -26,6 +26,6 @@ python -m pip install dependency-injector
 python -m pip install asyncio
 python -m pip install wiringpi
 python -m pip install smbus
-python -m pip install APIClient
+python -m pip install requests
 python -m pip install PyQt5
 ```
