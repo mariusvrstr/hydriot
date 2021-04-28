@@ -29,6 +29,12 @@ class Main():
     async def boot(self, integration_adapter):
         container = Container()
 
+        self.ph_sensor = container.ph_sensor_factory()
+        
+        if self.ph_sensor.is_available():
+            self.hydriot.set_ph_sensor(self.ph_sensor.sensor_summary)
+            asyncio.ensure_future(self.ph_sensor.run_schedule())
+
         self.tds_sensor =  container.tds_factory()
 
         if self.tds_sensor.is_available():
@@ -70,6 +76,7 @@ class Main():
 
             self.tds_sensor.stop_schedule()
             self.water_level_sensor.stop_schedule()
+            self.ph_sensor.stop_schedule()
 
             if AppConfig().get_enable_sim() == False:
                 GPIO.cleanup()

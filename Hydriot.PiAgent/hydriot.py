@@ -15,6 +15,9 @@ class Hydriot():
 
     def set_water_level_sensor(self, water_level_sensor):
         self.water_level_sensor = water_level_sensor
+    
+    def set_ph_sensor(self, ph_sensor):
+        self.ph_sensor = ph_sensor
 
     def set_water_pump_trigger(self, water_pump_trigger):
         self.water_pump_trigger = water_pump_trigger

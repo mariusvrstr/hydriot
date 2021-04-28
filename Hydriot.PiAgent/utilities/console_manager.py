@@ -54,6 +54,8 @@ class ConsoleManager(object):
                     print(self.get_sensor_summary(hydriot.tds_sensor))
                 if hydriot.water_level_sensor is not None:
                     print(self.get_sensor_summary(hydriot.water_level_sensor))
+                if hydriot.ph_sensor is not None:
+                    print(self.get_sensor_summary(hydriot.ph_sensor))
 
                 print()
                 print(">>> Registered Triggers <<<")
