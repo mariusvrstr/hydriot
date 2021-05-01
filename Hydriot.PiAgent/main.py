@@ -59,8 +59,6 @@ class Main():
     
         console_manager = ConsoleManager()
 
-        # integration_adapter.start_monitoring(sensor_manager.sensor_list)
-
         await console_manager.start_device_dashboard(self.hydriot, integration_adapter)
 
     def start(self):

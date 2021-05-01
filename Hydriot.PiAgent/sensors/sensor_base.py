@@ -31,7 +31,7 @@ class SensorBase(SchedulingAbstract):
                 await asyncio.sleep(delay_in_milliseconds/1000)          
 
         average = total / count
-        converted = self.convert_raw(value)
+        converted = self.convert_raw(average)
         self.sensor_summary.update_value(converted)
 
         return converted

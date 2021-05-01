@@ -1,6 +1,11 @@
 import smbus
 import time
 
+from enum import IntEnum
+
+## Manufacturer Source
+## http://www.cqrobot.wiki/index.php/ADS1115_16-Bit_ADC_Module
+
 # Get I2C bus
 bus = smbus.SMBus(1)
 
@@ -55,7 +60,28 @@ ADS1115_REG_CONFIG_CQUE_NONE		= 0x03 # Disable the comparator and put ALERT/RDY 
 mygain=0x02
 coefficient=0.125
 addr_G=ADS1115_IIC_ADDRESS0
+
+class ConverterMode(IntEnum):
+	x48 = 0x48
+	x47 = 0x47
+
+class Channel(IntEnum):
+	A0 = 0
+	A1 = 1
+	A2 = 2
+	A3 = 3
+
+# Programmable Gain Adjustment
+class PGA(IntEnum):
+	REG_CONFIG_PGA_6_144V	= 0x00 # 6.144V range = Gain 2/3
+	REG_CONFIG_PGA_4_096V	= 0x02 # 4.096V range = Gain 1
+	REG_CONFIG_PGA_2_048V	= 0x04 # 2.048V range = Gain 2 (default)
+	REG_CONFIG_PGA_1_024V	= 0x06 # 1.024V range = Gain 4
+	REG_CONFIG_PGA_0_512V	= 0x08 # 0.512V range = Gain 8
+	REG_CONFIG_PGA_0_256V	= 0x0A # 0.256V range = Gain 16
+
 class ADS1115():
+
 	def setGain(self,gain):
 		global mygain
 		global coefficient
@@ -91,7 +117,8 @@ class ADS1115():
 		2 : AINP = AIN1 and AINN = AIN3
 		3 : AINP = AIN2 and AINN = AIN3"""
 		self.channel = channel
-		while self.channel > 3 :
+
+		while int(self.channel) > 3 :
 			self.channel = 0
 		
 		return self.channel
