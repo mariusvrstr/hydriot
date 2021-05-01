@@ -6,7 +6,8 @@ from drivers.driver_base import DriverBase
 from drivers.cqrobot_analog_to_digital_converter import PGA, Channel, ConverterMode, ADS1115
 
 ## Manufacturer Source
-## ??
+## http://www.baaqii.net/promanage/BU0203%2BBU0481.pdf
+## http://www.baaqii.net/promanage/BU0203.zip
 
 class GaohouPhSensorDriver(DriverBase):
     converter_mode = None
@@ -30,12 +31,13 @@ class GaohouPhSensorDriver(DriverBase):
         self.ads1115.setAddr_ADS1115(self.converter_mode)
         self.ads1115.setGain(self.pga)
 
+    def read_voltage(self):
+        ph = self.ads1115.readVoltage(self.channel)
+        reading = ph['r']
+        return reading
 
     def read_value(self):
-        tds = self.ads1115.readVoltage(self.channel)
-        reading = tds['r']
-
-        return reading
+        return self.read_voltage()
 
     def is_available(self):
         reading = -1

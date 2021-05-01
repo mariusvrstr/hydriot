@@ -17,12 +17,20 @@ class SensorBase(SchedulingAbstract):
     def get_latest_value(self):
         return self.sensor_summary.current_value
 
-    def read_value(self):
-        value = self.read_implimentation()
-        self.sensor_summary.update_value(value)
-        return value
+    def convert_raw(self, raw_value):
+        return raw_value
 
-    def read_implimentation(self):
+    def read_average(self):
+        raise NotImplementedError  
+        pass
+
+    def read_value(self):
+        value = self.read_raw()
+        converted = self.convert_raw(value)
+        self.sensor_summary.update_value(converted)
+        return converted
+
+    def read_raw(self):
         if self.driver is None:
             raise NotImplementedError
 

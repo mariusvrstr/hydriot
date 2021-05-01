@@ -30,12 +30,14 @@ class CQRobotTotalDissolvedSolidsSensorDriver(DriverBase):
         
         self.ads1115.setAddr_ADS1115(self.converter_mode)
         self.ads1115.setGain(self.pga)
-
-    def read_value(self):
+    
+    def read_voltage(self):
         tds = self.ads1115.readVoltage(self.channel)
         reading = tds['r']
-
         return reading
+
+    def read_value(self):
+        return self.read_voltage()
 
     def is_available(self):
         reading = -1

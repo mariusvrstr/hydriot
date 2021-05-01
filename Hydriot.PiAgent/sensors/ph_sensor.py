@@ -21,7 +21,18 @@ class PhSensorStub(SensorBase):
 
 class PhSensor(SensorBase):
     driver = None
+    calibration = 0
 
     def __init__(self):
         self.driver = GaohouPhSensorDriver()
         SensorBase.__init__(self, self.driver, "pH Sensor", 2)
+
+    def convert_raw(self, raw_value):
+        ## Example 1
+        # ph_vol = raw_value*5.0/1024/6
+        # ph_value = -5.70 * ph_vol + self.calibration 
+
+        ph_vol = raw_value*5.0/1024
+        ph_value = ph_vol - 5.70
+
+        return (round(ph_value, 2))
