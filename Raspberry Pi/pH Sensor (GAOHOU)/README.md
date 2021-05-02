@@ -16,7 +16,7 @@ pH sensors usually read the voltage to an analog BNC adapter, as such they need 
 
 ![](https://raw.githubusercontent.com/mariusvrstr/hydriot/main/Raspberry%20Pi/pH%20Sensor%20(GAOHOU)/_resources/ph_connection.jpg)
 
-+ Item B
++ BNC
     + Red (V+ VCC)
     + Black (GND G)
     + Blue (Po - pH Out)
