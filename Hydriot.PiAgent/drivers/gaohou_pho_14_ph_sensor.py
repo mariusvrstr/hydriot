@@ -18,7 +18,7 @@ class GaohouPhSensorDriver(DriverBase):
         # Set the IIC address (0X48 or 0X49 based on switch on ADC Module)
         self.converter_mode = ConverterMode.x48
         # Set the Programmable Gain Adjustment (Gain and voltage range)
-        self.pga = PGA.REG_CONFIG_PGA_2_048V
+        self.pga = PGA.REG_CONFIG_PGA_6_144V
         # Set the channel
         self.channel = Channel.A1
 

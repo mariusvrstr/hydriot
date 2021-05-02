@@ -32,7 +32,7 @@ class PhSensor():
         self.ads1115.setAddr_ADS1115(ConverterMode.x48)
 
         #Sets the gain and input voltage range.
-        self.ads1115.setGain(PGA.REG_CONFIG_PGA_2_048V)
+        self.ads1115.setGain(PGA.REG_CONFIG_PGA_6_144V)
 
     def read_raw(self):        
 
