@@ -8,6 +8,7 @@ class AppConfig(object):
     # sections
     environment_section = "environment"
     integration_api_section = "integration_api"
+    sensors_section = "sensors"
     
     def __init__(self):
         # Check if there is already a configurtion file
@@ -21,6 +22,9 @@ class AppConfig(object):
             config.add_section(self.environment_section)
             config.set(self.environment_section, "os", platform.system())
             config.set(self.environment_section, "enable_sim", "true")
+
+            config.add_section(self.sensors_section)
+            config.set(self.sensors_section, "ph_offset", "-4.21")            
 
             config.add_section(self.integration_api_section)
             config.set(self.integration_api_section, "base_url", "https://localhost:44333/api")
@@ -57,3 +61,8 @@ class AppConfig(object):
 
     def get_integration_enabled(self):
         return self.get_key_value(self.integration_api_section, "enabled") == "true"
+
+    def get_ph_offset(self):
+        string_value = self.get_key_value(self.sensors_section, "ph_offset")
+        converted = float(string_value)
+        return converted

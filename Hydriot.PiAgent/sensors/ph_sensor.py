@@ -5,15 +5,15 @@ import os
 from utilities.maths import Math
 from sensors.sensor_base import SensorBase
 from drivers.gaohou_pho_14_ph_sensor import GaohouPhSensorDriver
+from utilities.app_config import AppConfig
 
 class PhSensorStub(SensorBase):
-
     def __init__(self):
-        SensorBase.__init__(self, None, "pH Sensor", 2, True)
+        SensorBase.__init__(self, None, "pH Sensor", 2, True)        
 
     def read_implimentation(self):
         ## Stubbed Reading
-        reading = Math().random_number(150, 300)
+        reading = Math().random_number(0, 14)
         return reading
     
     def is_available(self): 
@@ -21,11 +21,12 @@ class PhSensorStub(SensorBase):
 
 class PhSensor(SensorBase):
     driver = None
-    offset = -4.21
+    offset = None
 
     def __init__(self):
         self.driver = GaohouPhSensorDriver()
         SensorBase.__init__(self, self.driver, "pH Sensor", 2, True)
+        self.offset = AppConfig().get_ph_offset()
 
     def convert_raw(self, raw_value):
         # Check manifacturing manual for specific calculation from voltage to PH
