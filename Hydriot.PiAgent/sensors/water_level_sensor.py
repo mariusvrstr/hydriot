@@ -3,7 +3,7 @@ import time
 import os
 
 from utilities.pin_converter import GPIO
-from sensors.sensor_base import SensorBase
+from sensors.contracts.sensor_base import SensorBase
 from drivers.cqrobot_contact_liquid_level_sensor import CQRobotContactLiquidLevelSensorDriver
 
 class WaterLevelSensorStub(SensorBase):

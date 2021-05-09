@@ -70,7 +70,7 @@ class Main():
             loop.run_until_complete(self.boot(integration_adapter))
         
         except KeyboardInterrupt:
-            ConsoleManager().clear_console()
+            # ConsoleManager().clear_console()
 
             self.tds_sensor.stop_schedule()
             self.water_level_sensor.stop_schedule()

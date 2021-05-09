@@ -1,7 +1,9 @@
 from common.sensor_summary import SensorSummary
 from common.scheduling_abstract import SchedulingAbstract
 from abc import ABC, abstractmethod ## abstract module
+import sys
 import asyncio
+import time
 
 class SensorBase(SchedulingAbstract):    
     sensor_summary = None
@@ -33,7 +35,7 @@ class SensorBase(SchedulingAbstract):
         average = total / count
         converted = self.convert_raw(average)
         self.sensor_summary.update_value(converted)
-
+       
         return converted
 
 
@@ -49,11 +51,13 @@ class SensorBase(SchedulingAbstract):
 
         try:
             value = self.driver.read_value()
+
             return value
         except:
             e = sys.exc_info()[0]
             print(f"Failed to read [{self.sensor_summary.name}]. Error Details >> {e}")
-            return False
+            self.sensor_summary.set_last_read_error()            
+            return None
 
     def is_available(self):
         if self.driver is None:
@@ -64,6 +68,7 @@ class SensorBase(SchedulingAbstract):
         except:
             e = sys.exc_info()[0]
             print(f"Failed to verify if [{self.sensor_summary.name}] is available. Error Details >> {e}")
+            self.sensor_summary.set_last_read_error()
             return False
 
         pass

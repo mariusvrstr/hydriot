@@ -7,6 +7,10 @@ class SensorSummary():
     latest_value = None
     is_healthy = False
     _frequency_in_seconds = None
+    _consecutive_error_count = 0
+
+    def set_last_read_error(self):
+        self._consecutive_error_count += 1
 
     def __init__(self, name, frequency_in_Seconds):
         self.name = name
@@ -22,9 +26,13 @@ class SensorSummary():
 
         self.latest_value = new_value
         self.last_execution = time_now
+
+        if new_value is not None:
+            self._consecutive_error_count = 0
     
     def is_healthy(self):
-        if self.last_execution is None or self.latest_value is None:
+
+        if self.last_execution is None or self.latest_value is None or self._consecutive_error_count > 0:
             return False
              
         time_passed = (datetime.now() - self.last_execution).total_seconds()
