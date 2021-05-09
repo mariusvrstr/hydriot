@@ -2,6 +2,8 @@ from triggers.contracts.on_off_relay_abstract import OnOffRelayAbstract
 import RPi.GPIO as GPIO
 import time
 
+# TODO: Configurable pump cutout if water level drop below minimum water
+
 class PumpRelayStub(OnOffRelayAbstract):
     _actual_on_state = False
 

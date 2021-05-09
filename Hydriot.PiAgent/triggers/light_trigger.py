@@ -2,6 +2,8 @@ from triggers.contracts.on_off_relay_abstract import OnOffRelayAbstract
 import RPi.GPIO as GPIO
 import time
 
+# TODO: Add Light Schedule
+
 class LightRelayStub(OnOffRelayAbstract):
     _actual_on_state = False
 
