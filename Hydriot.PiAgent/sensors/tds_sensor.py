@@ -9,7 +9,7 @@ from drivers.cqrobot_total_dissolved_solids_sensor import CQRobotTotalDissolvedS
 class TDSSensorStub(SensorBase):
 
     def __init__(self):
-        SensorBase.__init__(self, None, "Total Dissolvable Solids (TDS) Sensor", 2, False)
+        SensorBase.__init__(self, None, "Total Dissolvable Solids (TDS) Sensor", 2, False, True)
 
     def read_implimentation(self):
         ## Stubbed Reading
@@ -24,6 +24,6 @@ class TDSSensor(SensorBase):
 
     def __init__(self):
         self.driver = CQRobotTotalDissolvedSolidsSensorDriver()
-        SensorBase.__init__(self, self.driver, "Total Dissolvable Solids (TDS) Sensor", 2, False)
+        SensorBase.__init__(self, self.driver, "Total Dissolvable Solids (TDS) Sensor", 2, False, True)
 
 

@@ -30,11 +30,11 @@ class DoseRelayAbstract(ABC):
         await asyncio.sleep(duration_in_seconds)
         self._switch_relay_off()
 
-    async def ensure_tube_is_filled(self):
+    async def ensure_tube_is_primed(self):
         if self._last_time_tube_was_filled is None: # TODO: Add 30min cooldown for pipe fill
             await self.fill_feeder_tube()
         
-    async def fill_feeder_tube(self):
+    async def prime_tube_with_fluid(self):
         # microdose until average tds reading rises with more than X
         # Use the raw self._dose())
         pass
@@ -95,7 +95,7 @@ class DoseRelayAbstract(ABC):
 
     
     async def dose(self, duration_in_seconds):    
-        self.ensure_tube_is_filled()
+        self.ensure_tube_is_primed()
         # Set dose_should_finish_by timestampt
         await self._dose(duration_in_seconds)
 

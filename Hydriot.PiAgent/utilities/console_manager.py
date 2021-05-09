@@ -21,11 +21,18 @@ class ConsoleManager(object):
         pass
 
     def get_sensor_summary(self, sensor_summary):
-        age_in_seconds = "N/A" if sensor_summary.last_execution is None else round((datetime.now() - sensor_summary.last_execution).total_seconds(), 0)
-        latest_value = "N/A" if sensor_summary.latest_value is None else sensor_summary.latest_value
 
-        summary = f"{sensor_summary.name} latest value is [{latest_value}] from [{age_in_seconds}] seconds ago "
-        summary += "[ok]" if sensor_summary.is_healthy() else "[Unhealthy]"    
+        age_in_seconds = None if sensor_summary.last_execution is None else round((datetime.now() - sensor_summary.last_execution).total_seconds(), 0)
+        latest_value = None if sensor_summary.latest_value is None else sensor_summary.latest_value
+        default_display = "n/a"
+
+        summary = f"{sensor_summary.name} latest reading is "
+        summary += "[" + ("~" if sensor_summary.is_stabilizing else "")
+        summary += (default_display if latest_value is None else str(latest_value)) + "] "
+        summary += "from [" + (default_display if age_in_seconds is None else str(age_in_seconds)) + "] seconds ago. "
+        summary += "AVG [" + (default_display if sensor_summary.average_reading is None else str(round(sensor_summary.average_reading,2))) + "] "
+        summary += "DEV [" + (default_display if sensor_summary.reading_deviation is None else str(round(sensor_summary.reading_deviation,2))) + "] "
+        summary += ">>> " + ("HEALTHY" if sensor_summary.is_healthy() else "UNHEALTHY") + " <<<"
 
         return summary
 
