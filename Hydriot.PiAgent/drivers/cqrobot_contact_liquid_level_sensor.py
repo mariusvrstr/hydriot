@@ -1,6 +1,7 @@
 import wiringpi as GPIO
 from drivers.driver_base import DriverBase
 from utilities.pin_converter import PinMapper
+from utilities.app_config import AppConfig
 
 ## Manufacturer Source
 ## http://www.cqrobot.wiki/index.php/Liquid_Level_Sensor
@@ -22,6 +23,9 @@ class CQRobotContactLiquidLevelSensorDriver(DriverBase):
 
     def is_available(self):
         reading = -1
+
+        if AppConfig().is_water_level_sensor_enabled() is False:
+            return False
 
         try:
             # TODO: If there is nothing it still reads as 0 need better mechanism

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod ## abstract module
 
-class DriverBase(ABC):    
+class DriverBase(ABC):
 
     def __init__(self):
         self.initialize()

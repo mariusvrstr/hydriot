@@ -47,6 +47,13 @@ class Main():
             self.hydriot.set_water_level_sensor(self.water_level_sensor.sensor_summary)
             asyncio.ensure_future(self.water_level_sensor.run_schedule())
 
+        # TODO: Need to get this working
+        # self.light_sensor_infrared =  container.light_sensor_infrared_factory()
+
+        # if self.light_sensor_infrared.is_available():
+           # self.hydriot.set_light_sensor_infrared(self.light_sensor_infrared.sensor_summary)
+           # asyncio.ensure_future(self.light_sensor_infrared.run_schedule())
+
         self.light_trigger = container.light_relay_factory()
         
         if self.light_trigger._is_enabled:

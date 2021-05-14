@@ -4,6 +4,7 @@ import os
 
 from drivers.driver_base import DriverBase
 from drivers.cqrobot_analog_to_digital_converter import PGA, Channel, ConverterMode, ADS1115
+from utilities.app_config import AppConfig
 
 ## Manufacturer Source
 ## http://www.cqrobot.wiki/index.php/TDS_Meter_Sensor
@@ -41,6 +42,9 @@ class CQRobotTotalDissolvedSolidsSensorDriver(DriverBase):
 
     def is_available(self):
         reading = -1
+        
+        if AppConfig().is_tds_enabled_sensor() is False:
+            return False
 
         try:
             reading = self.read_value()

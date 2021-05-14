@@ -4,6 +4,7 @@ import os
 
 from drivers.driver_base import DriverBase
 from drivers.cqrobot_analog_to_digital_converter import PGA, Channel, ConverterMode, ADS1115
+from utilities.app_config import AppConfig
 
 ## Manufacturer Source
 ## http://www.baaqii.net/promanage/BU0203%2BBU0481.pdf
@@ -41,6 +42,9 @@ class GaohouPhSensorDriver(DriverBase):
 
     def is_available(self):
         reading = -1
+        
+        if AppConfig().is_ph_enabled_sensor() is False:
+            return False
 
         try:
             reading = self.read_value()

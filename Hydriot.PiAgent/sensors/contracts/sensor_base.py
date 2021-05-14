@@ -38,7 +38,6 @@ class SensorBase(SchedulingAbstract):
        
         return converted
 
-
     def read_value(self):
         value = self.read_raw()
         converted = self.convert_raw(value)
