@@ -8,7 +8,7 @@ import math
 import smbus
 import RPi.GPIO as GPIO
 
-INI_PIN             = 4
+INI_PIN             = 4     ## GPIO 4 / Pin 7
 
 ADDR                = (0x29)
 
@@ -80,9 +80,9 @@ LUX_DF              = 762.0
 MAX_COUNT_100MS     = (36863) # 0x8FFF
 MAX_COUNT           = (65535) # 0xFFFF
 
-class TSL2591:
+class TSL2591():
     def __init__(self, address=ADDR):
-        self.i2c = smbus.SMBus(1)
+        self.i2c = smbus.SMBus(1)       # Create low level communication bus
         self.address = address
         
         GPIO.setmode(GPIO.BCM)
