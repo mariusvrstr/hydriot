@@ -29,3 +29,4 @@ python -m pip install smbus
 python -m pip install requests
 python -m pip install PyQt5
 ```
+
