@@ -2,7 +2,7 @@ import sys
 sys.path.append('../')
 import time
 import os
-from CQRobot_ADS1115 import ADS1115
+from ADS1115 import ADS1115
 
 ## Calculate odd and even for visual tic
 def NumberType(num):
