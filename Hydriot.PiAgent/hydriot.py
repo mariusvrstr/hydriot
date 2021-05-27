@@ -1,9 +1,12 @@
 
+from configparser import NoSectionError
+
 class Hydriot():
     tds_sensor = None
     water_level_sensor = None
     ph_sensor = None
     light_sensor_infrared = None
+    voltage_tester = None
 
     water_pump_trigger = None
     light_trigger = None
@@ -23,7 +26,8 @@ class Hydriot():
     def set_light_sensor_infrared(self, light_sensor_infrared):
         self.light_sensor_infrared = light_sensor_infrared
 
-    
+    def set_voltage_tester(self, voltage_tester):
+        self.voltage_tester = voltage_tester
 
     def set_water_pump_trigger(self, water_pump_trigger):
         self.water_pump_trigger = water_pump_trigger

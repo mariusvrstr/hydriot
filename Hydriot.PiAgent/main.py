@@ -19,6 +19,7 @@ class Main():
     hydriot = None
     tds_sensor = None
     water_level_sensor = None
+    voltage_tester = None
     
     light_trigger = None
     water_pump_trigger = None
@@ -46,6 +47,12 @@ class Main():
         if self.water_level_sensor.is_available():
             self.hydriot.set_water_level_sensor(self.water_level_sensor.sensor_summary)
             asyncio.ensure_future(self.water_level_sensor.run_schedule())
+
+        self.voltage_tester = container.voltage_tester_factory()
+        if self.voltage_tester.is_available():
+            self.hydriot.set_voltage_tester(self.voltage_tester.sensor_summary)
+            asyncio.ensure_future(self.voltage_tester.run_schedule())
+
 
         # TODO: Need to get this working
         # self.light_sensor_infrared =  container.light_sensor_infrared_factory()
@@ -82,6 +89,7 @@ class Main():
             self.tds_sensor.stop_schedule()
             self.water_level_sensor.stop_schedule()
             self.ph_sensor.stop_schedule()
+            self.voltage_tester.stop_schedule()
 
             if AppConfig().get_enable_sim() == False:
                 GPIO.cleanup()

@@ -12,7 +12,7 @@ class AppConfig(object):
     available_sensors = "enabled_sensors"
     
     def __init__(self):
-        # Check if there is already a configurtion file
+        # Check if there is already a configuration file
         if not os.path.isfile(self._configfile_name):
             # Create the configuration file as it doesn't exist yet
             cfgfile = open(self._configfile_name, "w")
@@ -22,13 +22,14 @@ class AppConfig(object):
 
             config.add_section(self.environment_section)
             config.set(self.environment_section, "os", platform.system())
-            config.set(self.environment_section, "enable_sim", "true")
+            config.set(self.environment_section, "enable_sim", "true")      
 
             config.add_section(self.available_sensors)
             config.set(self.available_sensors, "water_level_enabled", "true")
             config.set(self.available_sensors, "ph_enabled", "true")
             config.set(self.available_sensors, "tds_enabled", "true")
             config.set(self.available_sensors, "light_enabled", "true")
+            config.set(self.available_sensors, "voltage_enabled", "true")
 
             config.add_section(self.sensors_section)
             config.set(self.sensors_section, "ph_offset", "-4.21")            
@@ -85,3 +86,6 @@ class AppConfig(object):
 
     def is_light_enabled_sensor(self):
         return self.get_key_value(self.available_sensors, "light_enabled") == "true"
+
+    def is_voltage_tester_enabled(self):
+        return self.get_key_value(self.available_sensors, "voltage_enabled") == "true"
