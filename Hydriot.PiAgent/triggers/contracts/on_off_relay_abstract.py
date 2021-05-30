@@ -6,8 +6,10 @@ class OnOffRelayAbstract(ABC):
     _is_enabled = None
 
     def _determine_expected_on_state(self, default_on_state):
-        # TODO: Go to cloud and determine what the state should be        
-        self._expected_on_state = default_on_state
+        # TODO: Go to cloud and determine what the state should be
+
+        if (self.is_enabled() and default_on_state):
+            self._expected_on_state = True
 
     def check_if_switched_on(self):
         self._expected_on_state = self._check_if_switched_on()
@@ -52,6 +54,6 @@ class OnOffRelayAbstract(ABC):
     @abstractmethod
     def _check_if_switched_on(self): raise NotImplementedError
 
-    @abstractmethod
-    def is_available(self): raise NotImplementedError
-
+    # Override for custom logic
+    def is_enabled(self):
+        return True

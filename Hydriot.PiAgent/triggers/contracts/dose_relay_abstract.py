@@ -99,4 +99,6 @@ class DoseRelayAbstract(ABC):
         # Set dose_should_finish_by timestampt
         await self._dose(duration_in_seconds)
 
-  
+    # Override for custom logic
+    def is_enabled(self):
+        return True

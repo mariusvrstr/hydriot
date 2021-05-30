@@ -53,7 +53,6 @@ class Main():
             self.hydriot.set_voltage_tester(self.voltage_tester.sensor_summary)
             asyncio.ensure_future(self.voltage_tester.run_schedule())
 
-
         # TODO: Need to get this working
         # self.light_sensor_infrared =  container.light_sensor_infrared_factory()
 
@@ -61,15 +60,17 @@ class Main():
            # self.hydriot.set_light_sensor_infrared(self.light_sensor_infrared.sensor_summary)
            # asyncio.ensure_future(self.light_sensor_infrared.run_schedule())
 
-        self.light_trigger = container.light_relay_factory()
-        
-        if self.light_trigger._is_enabled:
-            self.hydriot.set_light_trigger(self.light_trigger)
+        self.nutrient_disposer_trigger = container.nutrient_relay_factory() 
+        if self.nutrient_disposer_trigger.is_enabled:
+                self.hydriot.set_nutrient_disposer_trigger(self.nutrient_disposer_trigger)
 
-        self.water_pump_trigger = container.pump_relay_factory()
-        
-        if self.water_pump_trigger._is_enabled:
-            self.hydriot.set_water_pump_trigger(self.water_pump_trigger)
+        self.ph_down_trigger = container.ph_down_relay_factory()      
+        if self.ph_down_trigger.is_enabled:
+                self.hydriot.set_ph_down_trigger(self.ph_down_trigger)
+
+        self.water_pump_trigger = container.water_pump_relay_factory()      
+        if self.water_pump_trigger.is_enabled:
+                self.hydriot.set_water_pump_trigger(self.water_pump_trigger)
     
         console_manager = ConsoleManager()
 

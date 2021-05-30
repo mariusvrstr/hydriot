@@ -8,8 +8,9 @@ class AppConfig(object):
     # sections
     environment_section = "environment"
     integration_api_section = "integration_api"
-    sensors_section = "sensors"
+    sensors_section = "sensors"    
     available_sensors = "enabled_sensors"
+    available_triggers = "enabled_triggers"
     
     def __init__(self):
         # Check if there is already a configuration file
@@ -25,11 +26,16 @@ class AppConfig(object):
             config.set(self.environment_section, "enable_sim", "true")      
 
             config.add_section(self.available_sensors)
-            config.set(self.available_sensors, "water_level_enabled", "true")
-            config.set(self.available_sensors, "ph_enabled", "true")
-            config.set(self.available_sensors, "tds_enabled", "true")
-            config.set(self.available_sensors, "light_enabled", "true")
-            config.set(self.available_sensors, "voltage_enabled", "true")
+            config.set(self.available_sensors, "water_level_enabled", "false")
+            config.set(self.available_sensors, "ph_enabled", "false")
+            config.set(self.available_sensors, "tds_enabled", "false")
+            config.set(self.available_sensors, "light_enabled", "false")
+            config.set(self.available_sensors, "voltage_enabled", "false")
+
+            config.add_section(self.available_triggers)
+            config.set(self.available_triggers, "ph_down_enabled", "false")
+            config.set(self.available_triggers, "nutrient_dispenser_enabled", "false")
+            config.set(self.available_triggers, "water_pump_enabled", "false")
 
             config.add_section(self.sensors_section)
             config.set(self.sensors_section, "ph_offset", "-4.21")            
@@ -89,3 +95,12 @@ class AppConfig(object):
 
     def is_voltage_tester_enabled(self):
         return self.get_key_value(self.available_sensors, "voltage_enabled") == "true"
+
+    def is_ph_down_enabled(self):
+        return self.get_key_value(self.available_triggers, "ph_down_enabled") == "true"
+
+    def is_nutrient_dispenser_enabled(self):
+        return self.get_key_value(self.available_triggers, "nutrient_dispenser_enabled") == "true"
+
+    def is_water_pump_enabled(self):
+        return self.get_key_value(self.available_triggers, "water_pump_enabled") == "true"

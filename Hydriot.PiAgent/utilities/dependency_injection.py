@@ -7,8 +7,9 @@ from sensors.ph_sensor import PhSensorStub, PhSensor
 from sensors.light_sensor_infrared import LightSensorInfraredStub, LightSensorInfrared
 from sensors.voltage_tester import VoltageTesterStub, VoltageTester
 
-from triggers.light_trigger import LightRelayStub, LightRelay
-from triggers.pump_trigger import PumpRelayStub, PumpRelay
+from triggers.nutrient_dispenser_trigger import NutrientDispenserRelayStub, NutrientDispenserRelay
+from triggers.ph_down_trigger import PhDownRelayStub, PhDownRelay
+from triggers.water_pump_trigger import WaterPumpRelayStub, WaterPumpRelay
 
 class Container(containers.DeclarativeContainer):
     simulate = AppConfig().get_enable_sim()
@@ -19,8 +20,9 @@ class Container(containers.DeclarativeContainer):
     voltage_tester_factory = providers.Factory(VoltageTesterStub) if simulate else providers.Factory(VoltageTester)
     light_sensor_infrared_factory = providers.Factory(LightSensorInfraredStub) if simulate else providers.Factory(LightSensorInfrared)
     
-    light_relay_factory = providers.Factory(LightRelayStub) if simulate else providers.Factory(LightRelay)
-    pump_relay_factory = providers.Factory(PumpRelayStub) if simulate else providers.Factory(PumpRelay)
+    nutrient_relay_factory = providers.Factory(NutrientDispenserRelayStub) if simulate else providers.Factory(NutrientDispenserRelay)
+    water_pump_relay_factory = providers.Factory(WaterPumpRelayStub) if simulate else providers.Factory(WaterPumpRelay)
+    ph_down_relay_factory = providers.Factory(PhDownRelayStub) if simulate else providers.Factory(PhDownRelay)
 
     pass
 

@@ -69,10 +69,12 @@ class ConsoleManager(object):
                 print()
                 print(">>> Registered Triggers <<<")
 
-                if hydriot.light_trigger is not None:
-                    print(self.get_trigger_summary(hydriot.light_trigger))
                 if hydriot.water_pump_trigger is not None:
-                    print(self.get_trigger_summary(hydriot.water_pump_trigger)) 
+                     print(self.get_trigger_summary(hydriot.water_pump_trigger))
+                if hydriot.nutrient_disposer_trigger is not None:
+                     print(self.get_trigger_summary(hydriot.nutrient_disposer_trigger))
+                if hydriot.ph_down_trigger is not None:
+                     print(self.get_trigger_summary(hydriot.ph_down_trigger))
 
                 print()
                 print(">>> Integration Status <<<")

@@ -8,11 +8,9 @@ class Hydriot():
     light_sensor_infrared = None
     voltage_tester = None
 
-    water_pump_trigger = None
-    light_trigger = None
-    
-    add_nutrient_trigger = None
-    lower_ph_trigger = None
+    water_pump_trigger = None 
+    nutrient_disposer_trigger = None
+    ph_down_trigger = None
 
     def set_tds_sensor(self, tds_sensor):
         self.tds_sensor = tds_sensor
@@ -29,11 +27,16 @@ class Hydriot():
     def set_voltage_tester(self, voltage_tester):
         self.voltage_tester = voltage_tester
 
+    def set_nutrient_disposer_trigger(self, nutrient_disposer_trigger):
+        self.nutrient_disposer_trigger = nutrient_disposer_trigger
+    
+    def set_ph_down_trigger(self, ph_down_trigger):
+        self.ph_down_trigger = ph_down_trigger
+
     def set_water_pump_trigger(self, water_pump_trigger):
         self.water_pump_trigger = water_pump_trigger
 
-    def set_light_trigger(self, light_trigger):
-        self.light_trigger = light_trigger
+
 
     
     

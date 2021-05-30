@@ -1,14 +1,15 @@
 from triggers.contracts.on_off_relay_abstract import OnOffRelayAbstract
 import RPi.GPIO as GPIO
+from utilities.app_config import AppConfig
 import time
 
 # TODO: Configurable pump cutout if water level drop below minimum water
 
-class PumpRelayStub(OnOffRelayAbstract):
+class WaterPumpRelayStub(OnOffRelayAbstract):
     _actual_on_state = False
 
     def __init__(self):
-        OnOffRelayAbstract.__init__(self, "Pump Switch", False, True)
+        OnOffRelayAbstract.__init__(self, "Water Pump Switch", False, True)
 
     def _switch_relay_on(self):
         self._actual_on_state = True
@@ -21,17 +22,15 @@ class PumpRelayStub(OnOffRelayAbstract):
     def _check_if_switched_on(self): 
         return self._actual_on_state
 
-    def is_available(self): 
-        return True
 
-class PumpRelay(OnOffRelayAbstract):
+class WaterPumpRelay(OnOffRelayAbstract):
     relay_pin_pos = 36 # Which PIN is used on the Pi
     is_low_volt_relay = True # Use this when connected to 3.3V source (If it does switch off use this and switch to 3.3V)
 
     def __init__(self):        
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.relay_pin_pos, GPIO.OUT) # GPIO Assign mode
-        OnOffRelayAbstract.__init__(self, "Pump Switch", True, True) # Start either ON or OFF
+        OnOffRelayAbstract.__init__(self, "Water Pump Switch", True, True) # Start either ON or OFF
 
     def _switch_relay_on(self):
         self._current_on_state = True
@@ -46,6 +45,7 @@ class PumpRelay(OnOffRelayAbstract):
         gpio_status = GPIO.input(self.relay_pin_pos)
         return gpio_status == 0 # On
 
-    def is_available(self): 
-        return True
+    def is_enabled(self): 
+        enabled = AppConfig().is_water_pump_enabled()
+        return enabled
 
