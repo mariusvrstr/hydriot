@@ -27,5 +27,6 @@ python -m pip install asyncio
 python -m pip install wiringpi
 python -m pip install smbus
 python -m pip install requests
+python -m pip install sip
 python -m pip install PyQt5
 ```
