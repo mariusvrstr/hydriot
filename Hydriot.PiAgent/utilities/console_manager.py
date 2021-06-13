@@ -1,12 +1,11 @@
 from utilities.app_config import AppConfig
 from datetime import datetime
 import RPi.GPIO as GPIO
-import time
-import asyncio
 import platform
 import os
 
 class ConsoleManager(object):
+    toggle = True
 
     def name(self):
         return platform.system()
@@ -43,58 +42,49 @@ class ConsoleManager(object):
         
         return summary
 
-    async def start_device_dashboard(self, hydriot, integration_adapter):
-        toggel = False
+    def display_sensors(self, hydriot, integration_adapter):
+        ConsoleManager().clear_console()
+        print("Hydriot Node")
+        print("=====================================================")
+        print()
 
-        try:
-            while True:
-                toggel = not toggel
+        print(">>> Registered Sensors <<<")
 
-                ConsoleManager().clear_console()
-                print("Hydriot Node")
-                print("=====================================================")
-                print()
+        if hydriot.tds_sensor is not None:
+            print(self.get_sensor_summary(hydriot.tds_sensor))
+        if hydriot.water_level_sensor is not None:
+            print(self.get_sensor_summary(hydriot.water_level_sensor))
+        if hydriot.ph_sensor is not None:
+            print(self.get_sensor_summary(hydriot.ph_sensor))
+        if hydriot.voltage_tester is not None:
+            print(self.get_sensor_summary(hydriot.voltage_tester))
 
-                print(">>> Registered Sensors <<<")
+        print()
+        print(">>> Registered Triggers <<<")
 
-                if hydriot.tds_sensor is not None:
-                    print(self.get_sensor_summary(hydriot.tds_sensor))
-                if hydriot.water_level_sensor is not None:
-                    print(self.get_sensor_summary(hydriot.water_level_sensor))
-                if hydriot.ph_sensor is not None:
-                    print(self.get_sensor_summary(hydriot.ph_sensor))
-                if hydriot.voltage_tester is not None:
-                    print(self.get_sensor_summary(hydriot.voltage_tester))
+        if hydriot.water_pump_trigger is not None:
+                print(self.get_trigger_summary(hydriot.water_pump_trigger))
+        if hydriot.nutrient_disposer_trigger is not None:
+                print(self.get_trigger_summary(hydriot.nutrient_disposer_trigger))
+        if hydriot.ph_down_trigger is not None:
+                print(self.get_trigger_summary(hydriot.ph_down_trigger))
 
-                print()
-                print(">>> Registered Triggers <<<")
+        print()
+        print(">>> Integration Status <<<")
+        status = "Connected" if integration_adapter.previous_integration_success else "Disconnected"
+        last_update = "N/A" if integration_adapter.last_integration_update == None else integration_adapter.last_integration_update
+        print(f"Connection status: [{status}] last updated [{last_update}]")
 
-                if hydriot.water_pump_trigger is not None:
-                     print(self.get_trigger_summary(hydriot.water_pump_trigger))
-                if hydriot.nutrient_disposer_trigger is not None:
-                     print(self.get_trigger_summary(hydriot.nutrient_disposer_trigger))
-                if hydriot.ph_down_trigger is not None:
-                     print(self.get_trigger_summary(hydriot.ph_down_trigger))
+        print()
+        if AppConfig().get_enable_sim():
+            print("WARNING! Simulator Mode Enabled")
+            pass
+                        
+        print("----------------------------------------------------")    
+        footer = "*Press Cntr+C to exit monitoring "
+        footer += "[-]" if self.toggle else "[|]"
+        print(footer)
+        print()
 
-                print()
-                print(">>> Integration Status <<<")
-                status = "Connected" if integration_adapter.previous_integration_success else "Disconnected"
-                last_update = "N/A" if integration_adapter.last_integration_update == None else integration_adapter.last_integration_update
-                print(f"Connection status: [{status}] last updated [{last_update}]")
+        self.toggle = not self.toggle
 
-                print()
-                if AppConfig().get_enable_sim():
-                    print("WARNING! Simulator Mode Enabled")
-                    pass
-                                
-                print("----------------------------------------------------")    
-                footer = "*Press Cntr+C to exit monitoring "
-                footer += "[-]" if toggel else "[|]"
-                print(footer)
-                print()
-
-                await asyncio.sleep(2)
-
-        except KeyboardInterrupt:
-            pass            
-        pass

@@ -1,10 +1,8 @@
 from datetime import datetime
 from abc import ABC, abstractmethod
-
 import asyncio
 
 class SchedulingAbstract(ABC):
-
     frequency_in_seconds = None
     _is_monitoring = False
     _use_average = False

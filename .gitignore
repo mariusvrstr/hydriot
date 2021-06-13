@@ -469,3 +469,4 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 Hydriot.PiAgent/.vscode/settings.json
+Hydriot.PiAgent/.vscode/launch.json

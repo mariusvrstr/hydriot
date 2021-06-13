@@ -1,13 +1,12 @@
 from common.sensor_summary import SensorSummary
 from common.scheduling_abstract import SchedulingAbstract
-from abc import ABC, abstractmethod ## abstract module
 import sys
 import asyncio
-import time
+
 
 class SensorBase(SchedulingAbstract):    
     sensor_summary = None
-    driver = None
+    driver = None    
 
     def __init__(self, driver, sensor_name, frequency_in_seconds, use_average, expect_deviation):
         self.driver = driver
@@ -41,7 +40,8 @@ class SensorBase(SchedulingAbstract):
     def read_value(self):
         value = self.read_raw()
         converted = self.convert_raw(value)
-        self.sensor_summary.update_value(converted)
+        self.sensor_summary.update_value(converted)        
+
         return converted
 
     def read_raw(self):
@@ -69,6 +69,4 @@ class SensorBase(SchedulingAbstract):
             print(f"Failed to verify if [{self.sensor_summary.name}] is available. Error Details >> {e}")
             self.sensor_summary.set_last_read_error()
             return False
-
-        pass
 
