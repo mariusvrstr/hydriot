@@ -34,4 +34,4 @@ class PhSensor(SensorBase):
         ph_vol = (((raw_value*5.0)/1024)/6)
         ph_value = (3.5 * ph_vol) + self.offset
 
-        return (round(ph_value, 2))
+        return round(ph_value, 2)

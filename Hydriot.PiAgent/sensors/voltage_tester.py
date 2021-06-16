@@ -20,8 +20,8 @@ class VoltageTester(SensorBase):
 
     def convert_raw(self, raw_value):
         converter = raw_value / 220
-
-        return converter
+        
+        return round(converter, 2)
 
     def __init__(self):
         self.driver = RasbeeVoltageTesterDriver()
