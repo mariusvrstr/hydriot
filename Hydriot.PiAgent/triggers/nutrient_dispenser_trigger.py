@@ -1,7 +1,6 @@
 import RPi.GPIO as GPIO
 
 from triggers.contracts.dose_relay_abstract import DoseRelayAbstract
-from triggers.contracts.on_off_relay_abstract import OnOffRelayAbstract
 from settings.app_config import AppConfig
 from settings.trigger_config import TriggerConfig
 
@@ -11,7 +10,7 @@ class NutrientDispenserRelayStub(DoseRelayAbstract):
     _actual_on_state = False
 
     def __init__(self):
-        DoseRelayAbstract.__init__(self, "Nutrient Dispenser Switch", AppConfig().is_nutrient_dispenser_enabled(), TriggerConfig().get_max_prime_time())
+        DoseRelayAbstract.__init__(self, "Nutrient Dispenser Switch", AppConfig().is_nutrient_dispenser_enabled(), TriggerConfig().get_tds_max_prime_time())
 
     def _switch_relay_on(self):
         self._actual_on_state = True
@@ -36,7 +35,10 @@ class NutrientDispenserRelay(DoseRelayAbstract):
     def __init__(self):        
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.relay_pin_pos, GPIO.OUT) # GPIO Assign mode
-        DoseRelayAbstract.__init__(self, "Nutrient Dispenser Switch", AppConfig().is_nutrient_dispenser_enabled(), TriggerConfig().get_max_prime_time())
+        DoseRelayAbstract.__init__(self, "Nutrient Dispenser Switch", AppConfig().is_nutrient_dispenser_enabled(), TriggerConfig().get_tds_max_prime_time())
+
+    def set_tds_sensor_summary(self, tds_sensor_summary):
+        self._counter_sensor = tds_sensor_summary
 
     def _switch_relay_on(self):
         self._current_on_state = True

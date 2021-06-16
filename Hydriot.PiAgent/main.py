@@ -14,7 +14,6 @@ from settings.app_config import AppConfig
 from settings.trigger_config import TriggerConfig
 from utilities.dependency_injection import Container
 
-
 class Window(QMainWindow):
 
     hydriot = None
@@ -34,6 +33,12 @@ class Window(QMainWindow):
     def get_tds_sensor(self):
         for sensor in self.sensors:
             if "tds" in sensor.name.lower():
+                return sensor        
+        return None
+    
+    def get_ph_sensor(self):
+        for sensor in self.sensors:
+            if "ph" in sensor.name.lower():
                 return sensor        
         return None   
 
@@ -59,39 +64,68 @@ class Window(QMainWindow):
         self.resize(300, 150)
         self.centralWidget = QWidget()
         self.setCentralWidget(self.centralWidget)
-        # Create and connect widgets
-        self.clicksLabel = QLabel("Dose on command", self)
-        self.clicksLabel.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        self.stepLabel = QLabel("Sensor Readings (Background Thread)")
-        self.stepLabel.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        self.countBtn = QPushButton("Nutrient Dosage", self)
-        self.countBtn.clicked.connect(self.dose_nutrient)
-        self.longRunningBtn = QPushButton("Start Sensors", self)
-        self.longRunningBtn.clicked.connect(self.runLongTask)
+
+        # Nutrient Dosage
+        self.nutrient_label = QLabel("Nutrient dose on command", self)
+        self.nutrient_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.nutrient_button = QPushButton("Nutrient Dosage", self)   
+        self.nutrient_button.clicked.connect(self.dose_nutrient)
+
+        # Ph Down Dosage
+        self.ph_down_label = QLabel("Ph down dose on command", self)
+        self.ph_down_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.ph_down_button = QPushButton("Ph Down Dosage", self)         
+        self.ph_down_button.clicked.connect(self.dose_ph_down)
+
+        self.sensors_button = QPushButton("Start Sensors", self)        
+        self.sensors_button.clicked.connect(self.runLongTask)
+        self.sensors_label = QLabel("Sensor Readings (Background Thread)")
+
         # Set the layout
         layout = QVBoxLayout()
-        layout.addWidget(self.clicksLabel)
-        layout.addWidget(self.countBtn)
+
+        layout.addWidget(self.sensors_label)
+        layout.addWidget(self.sensors_button)
+        
         layout.addStretch()
-        layout.addWidget(self.stepLabel)
-        layout.addWidget(self.longRunningBtn)
+   
+        layout.addWidget(self.nutrient_label)
+        layout.addWidget(self.nutrient_button)
+        layout.addStretch()
+
+        layout.addWidget(self.ph_down_label)
+        layout.addWidget(self.ph_down_button)
+        layout.addStretch()        
+       
         self.centralWidget.setLayout(layout)
 
     def dose_nutrient(self):
         nutrient_trigger = Container().nutrient_relay_factory()
         tds_summary = self.get_tds_sensor()
         nutrient_trigger.set_tds_sensor_summary(tds_summary)
-        dose_duration_seconds = TriggerConfig().get_dose_time_seconds()
+        dose_duration_seconds = TriggerConfig().get_tds_dose_time_seconds()
 
-        self.clicksLabel.setText(f"Starting [{dose_duration_seconds}] second nutrient dosage...")
+        self.nutrient_label.setText(f"Starting [{dose_duration_seconds}] second nutrient dosage...")
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         loop.run_until_complete(nutrient_trigger.dose(dose_duration_seconds))
-        self.clicksLabel.setText(f"Nutrient dosage complete.")       
+        self.nutrient_label.setText(f"Nutrient dosage complete.")       
+
+    def dose_ph_down(self):
+        ph_down_trigger = Container().ph_down_relay_factory()
+        ph_down_summary = self.get_ph_sensor()
+        ph_down_trigger.set_ph_down_sensor_summary(ph_down_summary)
+        dose_duration_seconds = TriggerConfig().get_ph_down_dose_time_seconds()
+
+        self.ph_down_label.setText(f"Starting [{dose_duration_seconds}] second Ph Down dosage...")
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(ph_down_trigger.dose(dose_duration_seconds))
+        self.ph_down_label.setText(f"Ph Down dosage complete.")     
 
     def reportProgress(self, counter):
         output = self.update_sensors(counter)
-        self.stepLabel.setText(f"Long-Running Step: {output}")
+        self.sensors_label.setText(f"Available Sensors >> {output}")
 
     def runLongTask(self):
         # Step 2: Create a QThread object
@@ -111,12 +145,13 @@ class Window(QMainWindow):
         self.thread.start()
 
         # Final resets
-        self.longRunningBtn.setEnabled(False)
+        self.sensors_button.setEnabled(False)
+
         self.thread.finished.connect(
-            lambda: self.longRunningBtn.setEnabled(True)
+            lambda: self.sensors_button.setEnabled(True)
         )
         self.thread.finished.connect(
-            lambda: self.stepLabel.setText("Long-Running Step: 0")
+            lambda: self.sensors_label.setText("Sensors stopped.")
         )
 
 app = QApplication(sys.argv)

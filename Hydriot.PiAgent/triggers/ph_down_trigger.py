@@ -1,15 +1,13 @@
-from triggers.contracts.on_off_relay_abstract import OnOffRelayAbstract
+from triggers.contracts.dose_relay_abstract import DoseRelayAbstract
 import RPi.GPIO as GPIO
 from settings.app_config import AppConfig
-import time
+from settings.trigger_config import TriggerConfig
 
-# TODO: Configurable pump cutout if water level drop below minimum water
-
-class PhDownRelayStub(OnOffRelayAbstract):
+class PhDownRelayStub(DoseRelayAbstract):
     _actual_on_state = False
 
     def __init__(self):
-        OnOffRelayAbstract.__init__(self, "PH Down Switch", False, True)
+        DoseRelayAbstract.__init__(self, "Ph-Down Switch", AppConfig().is_ph_down_enabled(), TriggerConfig().get_ph_down_max_prime_time())
 
     def _switch_relay_on(self):
         self._actual_on_state = True
@@ -19,18 +17,26 @@ class PhDownRelayStub(OnOffRelayAbstract):
         self._actual_on_state = False
         pass
 
-    def _check_if_switched_on(self): 
+    def check_if_switched_on(self):
         return self._actual_on_state
 
+    def is_enabled(self): 
+        enabled = AppConfig().is_ph_down_enabled()
+        return enabled
 
-class PhDownRelay(OnOffRelayAbstract):
+
+
+class PhDownRelay(DoseRelayAbstract):
     relay_pin_pos = 32 # Which PIN is used on the Pi
     is_low_volt_relay = True # Use this when connected to 3.3V source (If it does switch off use this and switch to 3.3V)
 
     def __init__(self):        
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.relay_pin_pos, GPIO.OUT) # GPIO Assign mode
-        OnOffRelayAbstract.__init__(self, "PH Down Switch", True, True) # Start either ON or OFF
+        DoseRelayAbstract.__init__(self, "Ph-Down Switch", AppConfig().is_ph_down_enabled(), TriggerConfig().get_ph_down_max_prime_time())
+
+    def set_ph_down_sensor_summary(self, ph_down_sensor_summary):
+        self._counter_sensor = ph_down_sensor_summary
 
     def _switch_relay_on(self):
         self._current_on_state = True
@@ -41,11 +47,11 @@ class PhDownRelay(OnOffRelayAbstract):
         GPIO.output(self.relay_pin_pos, GPIO.HIGH if self.is_low_volt_relay else GPIO.LOW) # OFF
         pass
 
-    def _check_if_switched_on(self): 
-        gpio_status = GPIO.input(self.relay_pin_pos)
-        return gpio_status == 0 # On
-
     def is_enabled(self): 
         enabled = AppConfig().is_ph_down_enabled()
         return enabled
+
+    def check_if_switched_on(self): 
+        gpio_status = GPIO.input(self.relay_pin_pos)
+        return gpio_status == 0 # On
 

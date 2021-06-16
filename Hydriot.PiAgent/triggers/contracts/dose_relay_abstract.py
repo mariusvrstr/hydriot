@@ -5,7 +5,7 @@ import asyncio
 class DoseRelayAbstract(ABC):
     name = "N/A"
     _is_enabled = None
-    _tds_sensor = None
+    _counter_sensor = None
     _eligable = False
     _last_time_tube_was_filled = None
     _maximum_prime_time = None
@@ -17,9 +17,6 @@ class DoseRelayAbstract(ABC):
     # Add manual dosage on schedule that also does not require TDS
     # Throw exception until calibration have taken place
     # During eligibility schedule check that dose_should_finish_by is not < now else switch relay off
-
-    def set_tds_sensor_summary(self, tds_sensor_summary):
-        self._tds_sensor = tds_sensor_summary
 
     def __init__(self, name, is_enabled, max_prime_time):
         self.name = name
@@ -55,9 +52,9 @@ class DoseRelayAbstract(ABC):
         start_measurement = None
         self._is_dosing = True
 
-        if self._tds_sensor is not None:
-            avg_deviation = self._tds_sensor.reading_deviation
-            start_measurement = self._tds_sensor.latest_value
+        if self._counter_sensor is not None:
+            avg_deviation = self._counter_sensor.reading_deviation
+            start_measurement = self._counter_sensor.latest_value
 
         self._switch_relay_on()
         prime_time_end = datetime.now() + timedelta(seconds=self._maximum_prime_time)
@@ -65,8 +62,8 @@ class DoseRelayAbstract(ABC):
         while (datetime.now() <= prime_time_end):
             await asyncio.sleep(1)
             
-            if self._tds_sensor is not None:
-                startingToInfluenceTds =  self._tds_sensor.latest_value > (start_measurement + avg_deviation)
+            if self._counter_sensor is not None:
+                startingToInfluenceTds =  self._counter_sensor.latest_value > (start_measurement + avg_deviation)
                 if startingToInfluenceTds:
                     break
 
