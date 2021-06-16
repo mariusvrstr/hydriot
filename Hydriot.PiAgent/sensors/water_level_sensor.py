@@ -1,7 +1,3 @@
-import sys
-import time
-import os
-
 from utilities.pin_converter import GPIO
 from sensors.contracts.sensor_base import SensorBase
 from drivers.cqrobot_contact_liquid_level_sensor import CQRobotContactLiquidLevelSensorDriver

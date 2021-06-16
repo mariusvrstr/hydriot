@@ -1,6 +1,6 @@
 from triggers.contracts.on_off_relay_abstract import OnOffRelayAbstract
 import RPi.GPIO as GPIO
-from utilities.app_config import AppConfig
+from settings.app_config import AppConfig
 import time
 
 # TODO: Configurable pump cutout if water level drop below minimum water

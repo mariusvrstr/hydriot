@@ -4,7 +4,7 @@ import os
 
 from drivers.driver_base import DriverBase
 from drivers.cqrobot_analog_to_digital_converter import PGA, Channel, ConverterMode, ADS1115
-from utilities.app_config import AppConfig
+from settings.app_config import AppConfig
 
 ## Manufacturer Source
 ## http://www.baaqii.net/promanage/BU0203%2BBU0481.pdf

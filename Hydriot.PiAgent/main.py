@@ -4,13 +4,16 @@
 ============================================================
 """
 
-# import RPi.GPIO as GPIO
-
 import sys
+import asyncio
 
 from PyQt5.QtCore import Qt, QThread
 from PyQt5.QtWidgets import (QApplication, QLabel, QMainWindow, QPushButton, QVBoxLayout, QWidget)
 from background_worker import BackgroundWorker
+from settings.app_config import AppConfig
+from settings.trigger_config import TriggerConfig
+from utilities.dependency_injection import Container
+
 
 class Window(QMainWindow):
 
@@ -24,8 +27,15 @@ class Window(QMainWindow):
 
     def __init__(self):
         super().__init__(parent = None)
-        self.clicksCount = 0
-        self.setupUi()    
+        AppConfig()
+        TriggerConfig()
+        self.setupUi()
+
+    def get_tds_sensor(self):
+        for sensor in self.sensors:
+            if "tds" in sensor.name.lower():
+                return sensor        
+        return None   
 
     def update_sensors(self, counter):
         found = False
@@ -50,12 +60,12 @@ class Window(QMainWindow):
         self.centralWidget = QWidget()
         self.setCentralWidget(self.centralWidget)
         # Create and connect widgets
-        self.clicksLabel = QLabel("Counting: 0 clicks", self)
+        self.clicksLabel = QLabel("Dose on command", self)
         self.clicksLabel.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         self.stepLabel = QLabel("Sensor Readings (Background Thread)")
         self.stepLabel.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        self.countBtn = QPushButton("Example UX Action", self)
-        self.countBtn.clicked.connect(self.countClicks)
+        self.countBtn = QPushButton("Nutrient Dosage", self)
+        self.countBtn.clicked.connect(self.dose_nutrient)
         self.longRunningBtn = QPushButton("Start Sensors", self)
         self.longRunningBtn.clicked.connect(self.runLongTask)
         # Set the layout
@@ -67,9 +77,17 @@ class Window(QMainWindow):
         layout.addWidget(self.longRunningBtn)
         self.centralWidget.setLayout(layout)
 
-    def countClicks(self):
-        self.clicksCount += 1
-        self.clicksLabel.setText(f"Counting: {self.clicksCount} clicks")
+    def dose_nutrient(self):
+        nutrient_trigger = Container().nutrient_relay_factory()
+        tds_summary = self.get_tds_sensor()
+        nutrient_trigger.set_tds_sensor_summary(tds_summary)
+        dose_duration_seconds = TriggerConfig().get_dose_time_seconds()
+
+        self.clicksLabel.setText(f"Starting [{dose_duration_seconds}] second nutrient dosage...")
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(nutrient_trigger.dose(dose_duration_seconds))
+        self.clicksLabel.setText(f"Nutrient dosage complete.")       
 
     def reportProgress(self, counter):
         output = self.update_sensors(counter)

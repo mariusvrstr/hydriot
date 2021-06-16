@@ -5,7 +5,7 @@ import os
 from utilities.maths import Math
 from sensors.contracts.sensor_base import SensorBase
 from drivers.gaohou_pho_14_ph_sensor import GaohouPhSensorDriver
-from utilities.app_config import AppConfig
+from settings.app_config import AppConfig
 
 class PhSensorStub(SensorBase):
     def __init__(self):

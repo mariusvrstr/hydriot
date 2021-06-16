@@ -1,7 +1,7 @@
 import wiringpi as GPIO
 from drivers.driver_base import DriverBase
 from utilities.pin_converter import PinMapper
-from utilities.app_config import AppConfig
+from settings.app_config import AppConfig
 
 ## Manufacturer Source
 ## http://www.cqrobot.wiki/index.php/Liquid_Level_Sensor

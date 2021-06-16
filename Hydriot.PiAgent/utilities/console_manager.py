@@ -1,4 +1,4 @@
-from utilities.app_config import AppConfig
+from settings.app_config import AppConfig
 from datetime import datetime
 import RPi.GPIO as GPIO
 import platform

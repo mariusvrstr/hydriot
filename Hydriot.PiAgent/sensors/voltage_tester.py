@@ -1,7 +1,3 @@
-import sys
-import time
-import os
-
 from utilities.maths import Math
 from sensors.contracts.sensor_base import SensorBase
 from drivers.rasbee_voltage_tester import RasbeeVoltageTesterDriver

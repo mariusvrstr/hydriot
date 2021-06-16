@@ -1,7 +1,7 @@
 import asyncio
 from datetime import datetime
 from adapters.hydriot_web_api import WebClient
-from utilities.app_config import AppConfig
+from settings.app_config import AppConfig
 
 class IntegrationAdapter(object):
     _frequency_in_seconds = 1    

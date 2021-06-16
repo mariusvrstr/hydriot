@@ -3,7 +3,7 @@ from PyQt5.QtCore import QObject, pyqtSignal, pyqtSignal
 from time import sleep
 from hydriot import Hydriot
 from utilities.dependency_injection import Container
-from utilities.app_config import AppConfig
+from settings.app_config import AppConfig
 from utilities.console_manager import ConsoleManager
 from utilities.integration_adapter import IntegrationAdapter
 from common.sensor_summary import SensorSummary
@@ -55,15 +55,15 @@ class BackgroundWorker(QObject):
 
         self.nutrient_disposer_trigger = container.nutrient_relay_factory() 
         if self.nutrient_disposer_trigger.is_enabled:
-                self.hydriot.set_nutrient_disposer_trigger(self.nutrient_disposer_trigger)
+            self.hydriot.set_nutrient_disposer_trigger(self.nutrient_disposer_trigger)
 
         self.ph_down_trigger = container.ph_down_relay_factory()      
         if self.ph_down_trigger.is_enabled:
-                self.hydriot.set_ph_down_trigger(self.ph_down_trigger)
+            self.hydriot.set_ph_down_trigger(self.ph_down_trigger)
 
         self.water_pump_trigger = container.water_pump_relay_factory()      
         if self.water_pump_trigger.is_enabled:
-                self.hydriot.set_water_pump_trigger(self.water_pump_trigger)
+            self.hydriot.set_water_pump_trigger(self.water_pump_trigger)
 
         self.integration_adapter = IntegrationAdapter(30)
 

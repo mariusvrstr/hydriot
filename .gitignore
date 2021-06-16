@@ -470,3 +470,4 @@ ASALocalRun/
 .mfractor/
 Hydriot.PiAgent/.vscode/settings.json
 Hydriot.PiAgent/.vscode/launch.json
+Hydriot.PiAgent/config_triggers.ini

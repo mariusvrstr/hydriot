@@ -4,7 +4,7 @@ import time
 import math
 import smbus
 import RPi.GPIO as GPIO
-from utilities.app_config import AppConfig
+from settings.app_config import AppConfig
 
 from drivers.driver_base import DriverBase
 

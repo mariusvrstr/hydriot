@@ -1,5 +1,5 @@
 from dependency_injector import containers, providers
-from utilities.app_config import AppConfig
+from settings.app_config import AppConfig
 
 from sensors.tds_sensor import TDSSensorStub, TDSSensor
 from sensors.water_level_sensor import WaterLevelSensorStub, WaterLevelSensor

@@ -4,7 +4,7 @@ import sys
 import time
 
 from datetime import date
-from utilities.app_config import AppConfig
+from settings.app_config import AppConfig
 from utilities.console_manager import ConsoleManager
 
 class WebClient(object):

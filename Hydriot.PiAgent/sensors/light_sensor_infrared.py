@@ -1,11 +1,9 @@
 import sys
-import time
-import os
 
 from utilities.maths import Math
 from sensors.contracts.sensor_base import SensorBase
 from drivers.cqrobot_light_sensor import CQRobotLightSensor
-from utilities.app_config import AppConfig
+from settings.app_config import AppConfig
 
 class LightSensorInfraredStub(SensorBase):
     def __init__(self):
