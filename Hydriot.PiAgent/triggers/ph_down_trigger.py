@@ -27,7 +27,7 @@ class PhDownRelayStub(DoseRelayAbstract):
 
 
 class PhDownRelay(DoseRelayAbstract):
-    relay_pin_pos = 32 # Which PIN is used on the Pi
+    relay_pin_pos = 36 # Which PIN is used on the Pi
     is_low_volt_relay = True # Use this when connected to 3.3V source (If it does switch off use this and switch to 3.3V)
 
     def __init__(self):        
