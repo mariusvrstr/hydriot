@@ -19,7 +19,7 @@ class VoltageTester(SensorBase):
     driver = None
 
     def convert_raw(self, raw_value):
-        converter = raw_value / 220
+        converter = raw_value / 199
         
         return round(converter, 2)
 
