@@ -1,3 +1,4 @@
+from configparser import Error
 from settings.app_config import AppConfig
 from datetime import datetime
 import RPi.GPIO as GPIO
@@ -6,6 +7,16 @@ import os
 
 class ConsoleManager(object):
     toggle = True
+    _save_to_file = False
+    _last_save_timestamp = None
+
+    def writeline(self, line = "", file = None):
+        print(line)
+
+        if (file is not None):
+            file.write(f"Timestamp [{datetime.now()}] >> {line}\n")
+
+        pass
 
     def name(self):
         return platform.system()
@@ -42,11 +53,32 @@ class ConsoleManager(object):
         
         return summary
 
+    def prepare_file(self, filePath):
+
+        if (".txt" not in filePath):
+            raise Error("Incorrect file specified")
+
+        ## Only save to file every minute
+        if (self._last_save_timestamp is not None and (datetime.now() - self._last_save_timestamp).total_seconds() < 60):
+            return None
+
+        file = open(filePath,"a", encoding="utf-8")
+        self._last_save_timestamp = datetime.now()
+        return file
+
     def display_sensors(self, hydriot, integration_adapter):
         ConsoleManager().clear_console()
+        config = AppConfig()
+        self._save_to_file = config.get_save_to_file()
+        file = None
+
+        if (self._save_to_file):
+            file = self.prepare_file("output.txt")
+
+
         print("Hydriot Node")
         print("=====================================================")
-        print()
+        print("")
 
         print(">>> Registered Sensors <<<")
 
@@ -57,9 +89,9 @@ class ConsoleManager(object):
         if hydriot.ph_sensor is not None:
             print(self.get_sensor_summary(hydriot.ph_sensor))
         if hydriot.voltage_tester is not None:
-            print(self.get_sensor_summary(hydriot.voltage_tester))
+            self.writeline(self.get_sensor_summary(hydriot.voltage_tester), file)
 
-        print()
+        print("")
         print(">>> Registered Triggers <<<")
 
         if hydriot.water_pump_trigger is not None:
@@ -76,7 +108,7 @@ class ConsoleManager(object):
         print(f"Connection status: [{status}] last updated [{last_update}]")
 
         print()
-        if AppConfig().get_enable_sim():
+        if config.get_enable_sim():
             print("WARNING! Simulator Mode Enabled")
             pass
                         
@@ -84,7 +116,10 @@ class ConsoleManager(object):
         footer = "*Press Cntr+C to exit monitoring "
         footer += "[-]" if self.toggle else "[|]"
         print(footer)
-        print()
+        print("")
+
+        if (file is not None):
+            file.close()
 
         self.toggle = not self.toggle
 
