@@ -24,7 +24,8 @@ class AppConfig(object):
             config.add_section(self.environment_section)
             config.set(self.environment_section, "os", platform.system())
             config.set(self.environment_section, "enable_sim", "true")
-            config.set(self.environment_section, "save_to_file", "false")     
+            config.set(self.environment_section, "save_to_file", "false")
+            config.set(self.environment_section, "safe_shutdown_threshold", "11")
 
             config.add_section(self.available_sensors)
             config.set(self.available_sensors, "water_level_enabled", "false")
@@ -64,6 +65,9 @@ class AppConfig(object):
 
     def get_save_to_file(self):
         return self.get_key_value(self.environment_section, "save_to_file") == "true"
+
+    def get_safe_shutdown_threshold(self):
+        return float(self.get_key_value(self.environment_section, "safe_shutdown_threshold"))
 
     def get_integration_node_id(self):
         return self.get_key_value(self.integration_api_section, "node_id")

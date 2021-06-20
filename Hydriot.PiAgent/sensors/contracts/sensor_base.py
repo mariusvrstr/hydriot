@@ -39,10 +39,15 @@ class SensorBase(SchedulingAbstract):
        
         return converted
 
+    ## Override if needed
+    def post_read_action(self):
+        pass
+
     def read_value(self):
         value = self.read_raw()
         converted = self.convert_raw(value)
-        self.sensor_summary.update_value(converted)        
+        self.sensor_summary.update_value(converted)
+        self.post_read_action()     
 
         return converted
 
