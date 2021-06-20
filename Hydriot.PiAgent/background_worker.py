@@ -70,13 +70,24 @@ class BackgroundWorker(QObject):
 
         console_manager = ConsoleManager()
 
-        while True:            
+        while True:
             console_manager.display_sensors(self.hydriot, self.integration_adapter)
 
-            self.progress.emit(self.hydriot.tds_sensor)
-            self.progress.emit(self.hydriot.ph_sensor)
-            self.progress.emit(self.hydriot.voltage_tester)
-            self.progress.emit(self.hydriot.water_level_sensor)   
+            ## Update pump status from water level sensor
+            if (self.water_pump_trigger is not None):
+                self.water_pump_trigger.sync_status()
+
+            if (self.hydriot.tds_sensor is not None):
+                self.progress.emit(self.hydriot.tds_sensor)
+            
+            if (self.hydriot.ph_sensor is not None):
+                self.progress.emit(self.hydriot.ph_sensor)
+
+            if (self.hydriot.voltage_tester is not None):  
+                self.progress.emit(self.hydriot.voltage_tester)
+
+            if (self.hydriot.water_level_sensor is not None):  
+                self.progress.emit(self.hydriot.water_level_sensor)   
 
             await asyncio.sleep(2)
 

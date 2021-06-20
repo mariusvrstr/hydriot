@@ -1,4 +1,4 @@
-from triggers.contracts.on_off_relay_abstract import OnOffRelayAbstract
+from triggers.contracts.on_off_relay_abstract import OnOffRelayAbstract, SwitchStatus
 from settings.app_config import AppConfig
 
 # TODO: Configurable pump cutout if water level drop below minimum water
@@ -8,7 +8,7 @@ class WaterPumpRelayStub(OnOffRelayAbstract):
 
     def __init__(self):
         enabled = AppConfig().is_water_pump_enabled()
-        OnOffRelayAbstract.__init__(self, "Water Pump Switch", enabled, True)
+        OnOffRelayAbstract.__init__(self, "Water Pump", enabled, SwitchStatus.On)
 
     def _switch_relay_on(self):
         self._actual_on_state = True
@@ -28,17 +28,31 @@ class WaterPumpRelay(OnOffRelayAbstract):
 
     def __init__(self):        
         enabled = AppConfig().is_water_pump_enabled()       
-        OnOffRelayAbstract.__init__(self, "Water Pump Switch", self.relay_pin_pos, enabled, True) # Start either ON or OFF
+        OnOffRelayAbstract.__init__(self, "Water Pump", self.relay_pin_pos, enabled, SwitchStatus.On)
 
     def set_water_level_sensor(self, water_sensor):
         self.water_sensor = water_sensor
 
-    def sync_status(self):
-        if self.water_sensor is None:
+    ## TODO: This should be converted to a observer pattern
+    def sync_status(self):        
+
+        if self.water_sensor is None or self.water_sensor.latest_value is None:
             return
-        
-        if self.water_sensor.latest_value != 1:
-            print("Switching water pump off, water not detected.")
+
+        currently_on = self.check_if_switched_on()
+        detect_water = self.water_sensor.latest_value == 1
+
+        if currently_on and not detect_water:
             self.switch_off()
-        else:
-            self.switch_on()
+
+        elif self._is_normally_on and detect_water:
+            self.switch_on()       
+
+    def validate_action(self, action):
+        if (action == SwitchStatus.Undefined):
+            raise Exception("Not a valid switch action")
+
+        if action == SwitchStatus.On and self.water_sensor.latest_value != 1:
+            return False
+
+        return True

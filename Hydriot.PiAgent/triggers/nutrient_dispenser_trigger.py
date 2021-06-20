@@ -4,8 +4,6 @@ from triggers.contracts.dose_relay_abstract import DoseRelayAbstract
 from settings.app_config import AppConfig
 from settings.trigger_config import TriggerConfig
 
-# TODO: Configurable pump cutout if water level drop below minimum water
-
 class NutrientDispenserRelayStub(DoseRelayAbstract):
     _actual_on_state = False    
 
