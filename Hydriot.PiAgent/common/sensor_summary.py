@@ -37,7 +37,7 @@ class SensorSummary():
             if reading > largest_value:
                 largest_value = reading
 
-        self.average_reading = round((total_sum/total_count),1)
+        self.average_reading = round((total_sum/total_count),2)
         self.reading_deviation = largest_value - smallest_value
         self.is_stabilizing = False
 
