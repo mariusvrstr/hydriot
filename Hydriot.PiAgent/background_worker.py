@@ -63,6 +63,7 @@ class BackgroundWorker(QObject):
 
         self.water_pump_trigger = container.water_pump_relay_factory()      
         if self.water_pump_trigger.is_enabled:
+            self.water_pump_trigger.set_water_level_sensor(self.water_level_sensor.sensor_summary)
             self.hydriot.set_water_pump_trigger(self.water_pump_trigger)
 
         self.integration_adapter = IntegrationAdapter(30)

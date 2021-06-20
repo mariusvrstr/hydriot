@@ -44,7 +44,9 @@ class OnOffRelayAbstract(ABC):
             self._switch_relay_off()
 
     def check_if_switched_on(self):
-        gpio_status = GPIO.input(self.relay_pin_pos)
+        self.sync_status()
+
+        gpio_status = GPIO.input(self.relay_pin_pos)        
         
         if self._is_normally_on and gpio_status != 0:
             return True
@@ -53,3 +55,7 @@ class OnOffRelayAbstract(ABC):
             return True
 
         return False
+
+    ## Override if there are specific requirements to be on
+    def sync_status(self):
+        pass
