@@ -6,11 +6,13 @@ import asyncio
 
 class SensorBase(SchedulingAbstract):    
     sensor_summary = None
-    driver = None    
+    driver = None
+    is_enabled = None
 
-    def __init__(self, driver, sensor_name, frequency_in_seconds, use_average):
+    def __init__(self, driver, sensor_name, frequency_in_seconds, is_enabled = False, use_average = False):
         self.driver = driver
         self.sensor_summary = SensorSummary(sensor_name, frequency_in_seconds)
+        self.is_enabled = is_enabled
         SchedulingAbstract.__init__(self, frequency_in_seconds, sensor_name, use_average)
 
     def get_last_read_time(self):

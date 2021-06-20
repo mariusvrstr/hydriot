@@ -94,11 +94,11 @@ class ConsoleManager(object):
         print("")
         print(">>> Registered Triggers <<<")
 
-        if hydriot.water_pump_trigger is not None:
+        if hydriot.water_pump_trigger is not None and hydriot.water_pump_trigger.is_enabled:
                 print(self.get_trigger_summary(hydriot.water_pump_trigger))
-        if hydriot.nutrient_disposer_trigger is not None:
+        if hydriot.nutrient_disposer_trigger is not None and hydriot.nutrient_disposer_trigger.is_enabled:
                 print(self.get_trigger_summary(hydriot.nutrient_disposer_trigger))
-        if hydriot.ph_down_trigger is not None:
+        if hydriot.ph_down_trigger is not None and hydriot.ph_down_trigger.is_enabled:
                 print(self.get_trigger_summary(hydriot.ph_down_trigger))
 
         print()

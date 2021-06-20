@@ -25,24 +25,24 @@ class BackgroundWorker(QObject):
 
         self.ph_sensor = container.ph_sensor_factory()
         
-        if self.ph_sensor.is_available():
+        if self.ph_sensor.is_enabled and self.ph_sensor.is_available():
             self.hydriot.set_ph_sensor(self.ph_sensor.sensor_summary)
             asyncio.ensure_future(self.ph_sensor.run_schedule())
 
         self.tds_sensor =  container.tds_factory()
 
-        if self.tds_sensor.is_available():
+        if self.tds_sensor.is_enabled and self.tds_sensor.is_available():
             self.hydriot.set_tds_sensor(self.tds_sensor.sensor_summary)
             asyncio.ensure_future(self.tds_sensor.run_schedule())
 
         self.water_level_sensor =  container.water_level_sensor_factory()
             
-        if self.water_level_sensor.is_available():
+        if self.water_level_sensor.is_enabled and self.water_level_sensor.is_available():
             self.hydriot.set_water_level_sensor(self.water_level_sensor.sensor_summary)
             asyncio.ensure_future(self.water_level_sensor.run_schedule())
 
         self.voltage_tester = container.voltage_tester_factory()
-        if self.voltage_tester.is_available():
+        if self.voltage_tester.is_enabled and self.voltage_tester.is_available():
             self.hydriot.set_voltage_tester(self.voltage_tester.sensor_summary)
             asyncio.ensure_future(self.voltage_tester.run_schedule())
 

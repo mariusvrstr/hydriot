@@ -7,7 +7,8 @@ from settings.app_config import AppConfig
 
 class LightSensorInfraredStub(SensorBase):
     def __init__(self):
-        SensorBase.__init__(self, None, "Light Sensor", 2, True)        
+        enabled = AppConfig().is_light_enabled_sensor()
+        SensorBase.__init__(self, None, "Light Sensor", 2, enabled, True)        
 
     def read_implimentation(self):
         ## Stubbed Reading
@@ -21,8 +22,9 @@ class LightSensorInfrared(SensorBase):
     driver = None
 
     def __init__(self):
+        enabled = AppConfig().is_light_enabled_sensor()
         self.driver = CQRobotLightSensor()
-        SensorBase.__init__(self, self.driver, "Light Sensor", 2, True)
+        SensorBase.__init__(self, self.driver, "Light Sensor", 2, enabled, True)
         self.sensor_summary.define_health_parameters(True)
 
     def read_raw(self):

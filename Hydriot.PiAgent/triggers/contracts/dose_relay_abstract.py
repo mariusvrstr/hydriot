@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod ## abstract module
 from datetime import datetime, timedelta
+
+import RPi.GPIO as GPIO
 import asyncio
 
 class DoseRelayAbstract(ABC):
     name = "N/A"
-    _is_enabled = None
+    is_enabled = None
     _counter_sensor = None
     _eligable = False
     _last_time_tube_was_filled = None
@@ -18,34 +20,30 @@ class DoseRelayAbstract(ABC):
     # Throw exception until calibration have taken place
     # During eligibility schedule check that dose_should_finish_by is not < now else switch relay off
 
-    def __init__(self, name, is_enabled, max_prime_time):
-        self.name = name
-        self._is_enabled = is_enabled
-        self._maximum_prime_time = max_prime_time
-
-        if (self._is_enabled == False):
-            return
-
-        self._switch_relay_off()
-
-    @abstractmethod
-    def _switch_relay_on(self): raise NotImplementedError
-
-    @abstractmethod
-    def _switch_relay_off(self): raise NotImplementedError
-
-    @abstractmethod
-    def is_enabled(self): raise NotImplementedError
-
-    @abstractmethod
-    def check_if_switched_on(self): raise NotImplementedError
-
     async def _dose(self, duration_in_seconds):     
         self._is_dosing = True   
         self._switch_relay_on()        
         await asyncio.sleep(duration_in_seconds)
         self._switch_relay_off()
         self._is_dosing = False
+
+    def _switch_relay_on(self):
+        self._current_on_state = True
+        GPIO.output(self.relay_pin_pos, GPIO.LOW if self.is_low_volt_relay else GPIO.HIGH) # ON
+        pass
+    
+    def _switch_relay_off(self): 
+        GPIO.output(self.relay_pin_pos, GPIO.HIGH if self.is_low_volt_relay else GPIO.LOW) # OFF
+        pass
+
+    def __init__(self, name, is_enabled, max_prime_time):
+        self.name = name
+        self.is_enabled = is_enabled
+        self._maximum_prime_time = max_prime_time
+
+    def check_if_switched_on(self): 
+        gpio_status = GPIO.input(self.relay_pin_pos)
+        return gpio_status == 0 # relay is switched on
 
     async def prime_tube_with_fluid(self):
         avg_deviation = None
