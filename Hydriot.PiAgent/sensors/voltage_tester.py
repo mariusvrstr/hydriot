@@ -5,7 +5,7 @@ from drivers.rasbee_voltage_tester import RasbeeVoltageTesterDriver
 class VoltageTesterStub(SensorBase):
 
     def __init__(self):
-        SensorBase.__init__(self, None, "Battery Voltage Tester", 2, False, False)
+        SensorBase.__init__(self, None, "Battery Voltage Tester", 2, False)
 
     def read_implimentation(self):
         ## Stubbed Reading
@@ -25,6 +25,7 @@ class VoltageTester(SensorBase):
 
     def __init__(self):
         self.driver = RasbeeVoltageTesterDriver()
-        SensorBase.__init__(self, self.driver, "Battery Voltage Tester", 2, False, True)
+        SensorBase.__init__(self, self.driver, "Battery Voltage Tester", 2, False)
+        self.sensor_summary.define_health_parameters(True, 10, 14)
 
 

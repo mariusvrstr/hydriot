@@ -8,9 +8,9 @@ class SensorBase(SchedulingAbstract):
     sensor_summary = None
     driver = None    
 
-    def __init__(self, driver, sensor_name, frequency_in_seconds, use_average, expect_deviation):
+    def __init__(self, driver, sensor_name, frequency_in_seconds, use_average):
         self.driver = driver
-        self.sensor_summary = SensorSummary(sensor_name, frequency_in_seconds, expect_deviation)
+        self.sensor_summary = SensorSummary(sensor_name, frequency_in_seconds)
         SchedulingAbstract.__init__(self, frequency_in_seconds, sensor_name, use_average)
 
     def get_last_read_time(self):

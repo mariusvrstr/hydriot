@@ -9,7 +9,7 @@ from settings.app_config import AppConfig
 
 class PhSensorStub(SensorBase):
     def __init__(self):
-        SensorBase.__init__(self, None, "pH Sensor", 2, True, True)        
+        SensorBase.__init__(self, None, "pH Sensor", 2, True)        
 
     def read_implimentation(self):
         ## Stubbed Reading
@@ -25,8 +25,9 @@ class PhSensor(SensorBase):
 
     def __init__(self):
         self.driver = GaohouPhSensorDriver()
-        SensorBase.__init__(self, self.driver, "pH Sensor", 2, True, True)
+        SensorBase.__init__(self, self.driver, "pH Sensor", 2, True)
         self.offset = AppConfig().get_ph_offset()
+        self.sensor_summary.define_health_parameters(True, 0, 14)
 
     def convert_raw(self, raw_value):
         # Check manifacturing manual for specific calculation from voltage to PH

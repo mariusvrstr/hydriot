@@ -14,6 +14,8 @@ class SensorSummary():
     reading_deviation = None
     is_stabilizing = True
     expect_variance = None
+    lower_threshold = None
+    upper_threshold = None
 
     _history_depth = 20
     _stabilizing_count = 5
@@ -60,11 +62,15 @@ class SensorSummary():
         self._consecutive_error_count += 1
         self._reset_history()
 
-    def __init__(self, name, frequency_in_Seconds, expect_variance):
+    def __init__(self, name, frequency_in_Seconds):
         self.name = name
         self._frequency_in_seconds = frequency_in_Seconds
-        self.expect_variance = expect_variance
         self._reset_history()
+
+    def define_health_parameters(self, expect_variance = False, lower_threshold = None, upper_threshold = None):
+        self.expect_variance = expect_variance
+        self.lower_threshold = lower_threshold
+        self.upper_threshold = upper_threshold
 
     def update_value(self, new_value):
         time_now = datetime.now()
@@ -81,16 +87,27 @@ class SensorSummary():
             self._consecutive_error_count = 0
             self._update_history_metadata()
     
-    def is_healthy(self):
-        if self.last_execution is None or self.latest_value is None or self._consecutive_error_count > 0:
+    def is_healthy(self):        
+        has_reading = self.last_execution is None or self.latest_value is None
+        has_multiple_errors = self._consecutive_error_count > 0       
+
+        if has_reading or has_multiple_errors:
+            return False
+
+        time_passed = (datetime.now() - self.last_execution).total_seconds()
+        not_updated_in_time = time_passed > (self._frequency_in_seconds * 3)
+
+        if (not_updated_in_time):
             return False
              
-        time_passed = (datetime.now() - self.last_execution).total_seconds()
-
-        if time_passed > (self._frequency_in_seconds * 3):
+        has_deviation = self.reading_deviation is not None and self.reading_deviation != 0    
+        if self.expect_variance and not has_deviation:
+            return False
+        
+        if (self.upper_threshold is not None and self.average_reading > self.upper_threshold):
             return False
 
-        if self.expect_variance and self.reading_deviation is not None and self.reading_deviation == 0:
+        if (self.lower_threshold is not None and self.average_reading < self.lower_threshold):
             return False
         
         return True

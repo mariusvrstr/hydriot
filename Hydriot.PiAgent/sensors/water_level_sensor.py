@@ -5,7 +5,7 @@ from drivers.cqrobot_contact_liquid_level_sensor import CQRobotContactLiquidLeve
 class WaterLevelSensorStub(SensorBase):
 
     def __init__(self, ):
-        SensorBase.__init__(self, None, "Water Level Sensor", 1, False, False)
+        SensorBase.__init__(self, None, "Water Level Sensor", 1, False)
 
     def read_implimentation(self): # override driver default
         return 1  ## Stubbed Reading
@@ -19,7 +19,8 @@ class WaterLevelSensor(SensorBase):
     def __init__(self):
         # TODO: Move this to DI configuration
         self.driver = CQRobotContactLiquidLevelSensorDriver(GPIO.GPIO018)
-        SensorBase.__init__(self, self.driver, "Water Level Sensor", 1, False, False)
+        SensorBase.__init__(self, self.driver, "Water Level Sensor", 1, False)
+        self.sensor_summary.define_health_parameters(False, 0, 1)
 
 
 
