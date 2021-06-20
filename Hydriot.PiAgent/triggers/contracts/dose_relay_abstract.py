@@ -40,6 +40,7 @@ class DoseRelayAbstract(ABC):
         self.name = name
         self.is_enabled = is_enabled
         self._maximum_prime_time = max_prime_time
+        self._switch_relay_off()
 
     def check_if_switched_on(self): 
         gpio_status = GPIO.input(self.relay_pin_pos)

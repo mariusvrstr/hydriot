@@ -5,6 +5,8 @@ class OnOffRelayAbstract(ABC):
     name = "N/A"
     is_enabled = None
     _is_normally_on = None
+    relay_pin_pos = None
+    is_low_volt_relay = True # Use this when connected to 3.3V source (If it does switch off use this and switch to 3.3V)
 
     def _switch_relay_on(self):
         self._current_on_state = True
@@ -21,10 +23,14 @@ class OnOffRelayAbstract(ABC):
         else:
             self.switch_off()
 
-    def __init__(self, name, is_enabled, is_normally_on = False):
+    def __init__(self, name, relay_pin_pos, is_enabled, is_normally_on = False):
         self.name = name
         self.is_enabled = is_enabled
         self._is_normally_on = is_normally_on
+        self.relay_pin_pos = relay_pin_pos
+
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(self.relay_pin_pos, GPIO.OUT)
 
         if (not self.is_enabled):
             return
