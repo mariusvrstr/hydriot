@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import (QApplication, QLabel, QMainWindow, QPushButton, QVB
 from background_worker import BackgroundWorker
 from settings.app_config import AppConfig
 from settings.trigger_config import TriggerConfig
-from utilities.dependency_injection import Container
+from gui_worker import GuiWorker
 
 class Window(QMainWindow):
 
@@ -23,11 +23,13 @@ class Window(QMainWindow):
     light_trigger = None
     water_pump_trigger = None
     sensors = []
+    gui_worker = None
 
     def __init__(self):
         super().__init__(parent = None)
         AppConfig()
         TriggerConfig()
+        self.gui_worker = GuiWorker()
         self.setupUi()
 
     def get_tds_sensor(self):
@@ -100,57 +102,43 @@ class Window(QMainWindow):
         self.centralWidget.setLayout(layout)
 
     def dose_nutrient(self):
-        nutrient_trigger = Container().nutrient_relay_factory()
-        tds_summary = self.get_tds_sensor()
-        nutrient_trigger.set_tds_sensor_summary(tds_summary)
-        dose_duration_seconds = TriggerConfig().get_tds_dose_time_seconds()
-
-        self.nutrient_label.setText(f"Starting [{dose_duration_seconds}] second nutrient dosage...")
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(nutrient_trigger.dose(dose_duration_seconds))
-        self.nutrient_label.setText(f"Nutrient dosage complete.")       
+        self.nutrient_button.setEnabled(False)
+        self.nutrient_label.setText(f"Starting nutrient dosage...")
+        self.gui_worker.action_nutrient_dose(self.get_tds_sensor())
+        self.nutrient_label.setText(f"Nutrient dosage complete.")     
+        self.nutrient_button.setEnabled(True)   
 
     def dose_ph_down(self):
-        ph_down_trigger = Container().ph_down_relay_factory()
-        ph_down_summary = self.get_ph_sensor()
-        ph_down_trigger.set_ph_down_sensor_summary(ph_down_summary)
-        dose_duration_seconds = TriggerConfig().get_ph_down_dose_time_seconds()
-
-        self.ph_down_label.setText(f"Starting [{dose_duration_seconds}] second Ph Down dosage...")
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(ph_down_trigger.dose(dose_duration_seconds))
-        self.ph_down_label.setText(f"Ph Down dosage complete.")     
+        self.ph_down_button.setEnabled(False)
+        self.ph_down_label.setText(f"Starting Ph Down dosage...")
+        self.gui_worker.action_ph_down_dose(self.get_ph_sensor())
+        self.ph_down_label.setText(f"Ph Down dosage complete.")
+        self.ph_down_button.setEnabled(True)
 
     def reportProgress(self, counter):
         output = self.update_sensors(counter)
         self.sensors_label.setText(f"Available Sensors >> {output}")
 
     def runLongTask(self):
-        # Step 2: Create a QThread object
-        self.thread = QThread()
-        # Step 3: Create a worker object
-        self.worker = BackgroundWorker()
-        # Step 4: Move worker to the thread
-        self.worker.moveToThread(self.thread)
-        # Step 5: Connect signals and slots
-        self.thread.started.connect(self.worker.run)
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
-        self.worker.progress.connect(self.reportProgress)
+        self.background_thread = QThread()
+        self.background_worker = BackgroundWorker()
 
-        # Step 6: Start the thread
-        self.thread.start()
+        self.background_worker.moveToThread(self.background_thread)
 
-        # Final resets
+        self.background_thread.started.connect(self.background_worker.run)
+        self.background_worker.finished.connect(self.background_thread.quit)
+        self.background_worker.finished.connect(self.background_worker.deleteLater)
+        self.background_thread.finished.connect(self.background_thread.deleteLater)
+        self.background_worker.progress.connect(self.reportProgress)
+
+        self.background_thread.start()
+
         self.sensors_button.setEnabled(False)
 
-        self.thread.finished.connect(
+        self.background_thread.finished.connect(
             lambda: self.sensors_button.setEnabled(True)
         )
-        self.thread.finished.connect(
+        self.background_thread.finished.connect(
             lambda: self.sensors_label.setText("Sensors stopped.")
         )
 
