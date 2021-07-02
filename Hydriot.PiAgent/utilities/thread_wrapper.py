@@ -1,54 +1,37 @@
-import asyncio
-import threading
-
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSignal
-from PyQt5.QtCore import Qt, QThread
-
+from PyQt5.QtCore import pyqtSignal, pyqtSignal
+from PyQt5.QtCore import QThread
 
 ## Single UX Worker Thread with multiple async tasksthat can be added with a group locking of dependant ones
-class ThreadWrapper(QObject):
-    thread = None
-    tasks = dict()
-    lock = None
+class ThreadWrapper:
+    current_thread = None
     task_manager = None
+    progress = pyqtSignal(int)
 
-    def __init__(self, task_manager, thread = QThread()) -> None:
-        self.thread = thread
-        self.lock =  threading.Lock()
+    def __init__(self, task_manager, current_thread = QThread()) -> None:
+        self.current_thread = current_thread
         self.task_manager = task_manager
 
-    def cleanup_task(self, task_type):
-        self.lock.acquire()
-
-        try:
-            del self.tasks[task_type]
-        finally:
-            self.lock.release()        
-
-    async def example_task(self, task_type):
-        print(f"starting example task [{task_type}]")
-        await asyncio.sleep(5)
-
-        self.cleanup_task(task_type)
-        print(f"completing example task [{task_type}]")        
+    def report_progress(int_value):
+        print(f"Report [{int_value}]")
+        pass
     
-    ##TODO: Add / Append action required
-    async def run_task(self, task):
-        task_type = type(task).__name__
-        self.lock.acquire()
+    def run_task(self, task, button, label):
 
-        try:
-            if task_type in self.tasks:
-                raise Exception("Already in progress, cannot start the same task while in progress.")
+        self.task_manager.add_task(task)
+        task.moveToThread(self.current_thread)
+        self.current_thread.started.connect(task.run)
+        task.finished.connect(self.current_thread.quit)
 
-            self.tasks[task_type] = task
-            self.task_manager.add_task(task_type)
+        task.finished.connect(task.deleteLater)
+        self.current_thread.finished.connect(self.current_thread.deleteLater)
+        task.progress.connect(self.report_progress)
 
-        finally:
-            self.lock.release()
-                
-        await self.example_task(task_type)
-        self.task_manager.remove_task(task_type)
+        self.current_thread.start()
 
+        task.finished.connect(
+            lambda: button.setEnabled(True)
+        )
 
-    
+        task.finished.connect(
+            lambda: label.setText(f"Completed [{task.__name__}]")
+        )

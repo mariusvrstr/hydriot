@@ -16,8 +16,6 @@ class ConsoleManager(object):
         if (file is not None):
             file.write(f"Timestamp [{datetime.now()}] >> {line}\n")
 
-        pass
-
     def name(self):
         return platform.system()
 
@@ -66,7 +64,7 @@ class ConsoleManager(object):
         self._last_save_timestamp = datetime.now()
         return file
 
-    def display_sensors(self, hydriot, integration_adapter):
+    def display_sensors(self, hydriot, integration_adapter, task_manager):
         ConsoleManager().clear_console()
         config = AppConfig()
         self._save_to_file = config.get_save_to_file()
@@ -74,7 +72,6 @@ class ConsoleManager(object):
 
         if (self._save_to_file):
             file = self.prepare_file("output.txt")
-
 
         print("Hydriot Node")
         print("=====================================================")
@@ -111,6 +108,12 @@ class ConsoleManager(object):
         if config.get_enable_sim():
             print("WARNING! Simulator Mode Enabled")
             pass
+
+        task_list = ""
+        for key in task_manager.tasks:
+            task_list += f"[{key}] "
+
+        print(f"Active tasks: {task_list}")
                         
         print("----------------------------------------------------")    
         footer = "*Press Cntr+C to exit monitoring "

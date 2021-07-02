@@ -5,7 +5,6 @@
 """
 
 import sys
-import asyncio
 
 from PyQt5.QtCore import Qt, QThread
 from PyQt5.QtWidgets import (QApplication, QLabel, QMainWindow, QPushButton, QVBoxLayout, QWidget)
@@ -104,15 +103,13 @@ class Window(QMainWindow):
     def dose_nutrient(self):
         self.nutrient_button.setEnabled(False)
         self.nutrient_label.setText(f"Starting nutrient dosage...")
-        self.gui_worker.action_nutrient_dose(self.get_tds_sensor())
-        self.nutrient_label.setText(f"Nutrient dosage complete.")     
+        self.gui_worker.action_nutrient_dose(self.nutrient_button, self.nutrient_label) ## self.get_tds_sensor(), 
         self.nutrient_button.setEnabled(True)   
 
     def dose_ph_down(self):
         self.ph_down_button.setEnabled(False)
         self.ph_down_label.setText(f"Starting Ph Down dosage...")
-        self.gui_worker.action_ph_down_dose(self.get_ph_sensor())
-        self.ph_down_label.setText(f"Ph Down dosage complete.")
+        self.gui_worker.action_ph_down_dose(self.ph_down_button, self.ph_down_label) ## self.get_ph_sensor(),
         self.ph_down_button.setEnabled(True)
 
     def reportProgress(self, counter):

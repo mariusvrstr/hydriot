@@ -3,7 +3,6 @@ from common.scheduling_abstract import SchedulingAbstract
 import sys
 import asyncio
 
-
 class SensorBase(SchedulingAbstract):    
     sensor_summary = None
     driver = None

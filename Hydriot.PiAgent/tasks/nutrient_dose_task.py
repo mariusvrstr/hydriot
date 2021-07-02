@@ -1,6 +1,9 @@
+import time
 
+from tasks.contracts.base_task import BaseTask
 
-class NutrientDoseTask:
+class NutrientDoseTask(BaseTask):
 
     def run(self):
-        pass
+        print(f"starting example task [NutrientDoseTask]")
+        time.sleep(3)
