@@ -1,37 +1,37 @@
-from PyQt5.QtCore import pyqtSignal, pyqtSignal
-from PyQt5.QtCore import QThread
 
-## Single UX Worker Thread with multiple async tasksthat can be added with a group locking of dependant ones
 class ThreadWrapper:
-    current_thread = None
+    task_name = None
     task_manager = None
-    progress = pyqtSignal(int)
+    current_task = None
+    button = None
+    label = None
 
-    def __init__(self, task_manager, current_thread = QThread()) -> None:
-        self.current_thread = current_thread
+    def __init__(self, task_manager, current_task, button, label) -> None:
         self.task_manager = task_manager
+        self.current_task = current_task
+        self.button = button
+        self.label = label
+        self.task_name = type(current_task).__name__
 
-    def report_progress(int_value):
+    def report_progress(self, int_value):
         print(f"Report [{int_value}]")
-        pass
-    
-    def run_task(self, task, button, label):
 
-        self.task_manager.add_task(task)
-        task.moveToThread(self.current_thread)
-        self.current_thread.started.connect(task.run)
-        task.finished.connect(self.current_thread.quit)
+    def cleanup(self):
+        self.button.setEnabled(True)
+        self.label.setText(f"Completed [{self.task_name}]")
+        self.task_manager.remove_task(self.task_name)      
+   
+    def run_task(self, thread):
+        self.task_manager.add_task(self.task_name, self.current_task) ##TODO: Add debug point for cleanup to run (else it does not trigger)
 
-        task.finished.connect(task.deleteLater)
-        self.current_thread.finished.connect(self.current_thread.deleteLater)
-        task.progress.connect(self.report_progress)
+        self.current_task.moveToThread(thread)
 
-        self.current_thread.start()
-
-        task.finished.connect(
-            lambda: button.setEnabled(True)
-        )
-
-        task.finished.connect(
-            lambda: label.setText(f"Completed [{task.__name__}]")
-        )
+        thread.started.connect(self.current_task.run)
+        self.current_task.finished.connect(self.cleanup)
+        self.current_task.finished.connect(thread.quit)
+        self.current_task.finished.connect(self.current_task.deleteLater)
+        thread.finished.connect(thread.deleteLater)
+ 
+        thread.start()
+        return thread
+      

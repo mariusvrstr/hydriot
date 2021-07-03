@@ -7,6 +7,7 @@ class SchedulingAbstract(ABC):
     _use_average = False
     _name = None
     task_manager = None
+    _task_name = None
 
     def is_monitoring(self):
         return self.task_manager.is_task_active(self)
@@ -15,12 +16,13 @@ class SchedulingAbstract(ABC):
         self.frequency_in_seconds = frequency_in_seconds
         self._name = name
         self._use_average = use_average
+        self._task_name = type(self).__name__
 
     async def run_schedule(self, task_manager):
         if (self.task_manager is None):
             self.task_manager = task_manager
 
-        self.task_manager.add_task(self)
+        self.task_manager.add_task(self._task_name, self)
 
         while self.is_monitoring():
             if self._use_average is True:
@@ -34,6 +36,6 @@ class SchedulingAbstract(ABC):
 
     def stop_schedule(self):
         print(f"Stopping [{self._name}]...")
-        self.task_manager.remove_task(self)
+        self.task_manager.remove_task(self._task_name)
 
 

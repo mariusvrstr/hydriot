@@ -4,6 +4,9 @@ from tasks.contracts.base_task import BaseTask
 
 class PhDownTask(BaseTask):
 
-    def run(self):
+    def run_custom(self):
         print(f"starting example task [PhDownTask]")
-        time.sleep(3)
+
+        for i in range(5, 0, -1):
+            print(f"Tic [{i}]")
+            time.sleep(1)

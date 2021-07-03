@@ -7,43 +7,37 @@ class TaskManager():
     def __init__(self) -> None:
         self.lock =  threading.Lock()
 
-    def add_task(self, task):
-        task_type = type(task).__name__
-
+    def add_task(self, key, task):
         self.lock.acquire()
 
         try:
-            if task_type in self.tasks:
-                raise Exception(f"Cannot add task [{task_type}] one is already existing.")
-            self.tasks[task_type] = task
+            if key in self.tasks:
+                raise Exception(f"Cannot add task [{key}] one is already existing.")
+            self.tasks[key] = task
         finally:
             self.lock.release()
 
-    def add__update_task(self, task):
-        task_type = type(task).__name__
+    def add_update_task(self, key, task):
         self.lock.acquire()
 
         try:
-            self.tasks[task_type] = task
+            self.tasks[key] = task
         finally:
             self.lock.release()
 
-    def remove_task(self, task):
-        task_type = type(task).__name__
+    def remove_task(self, key):
         self.lock.acquire()
 
         try:
-            del self.tasks[task_type]
+            del self.tasks[key]
         finally:
             self.lock.release()
 
-    def is_task_active(self, task):
-        task_type = type(task).__name__
-
-        if task_type not in self.tasks:
+    def is_task_active(self, key):
+        if key not in self.tasks:
             return False
 
-        return self.tasks[task_type]
+        return self.tasks[key]
 
     def is_working(self):
         tasks_in_progress = any(self.tasks)

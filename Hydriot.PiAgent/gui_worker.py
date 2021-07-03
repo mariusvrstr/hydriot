@@ -1,4 +1,6 @@
 from time import sleep
+
+from PyQt5.QtCore import QThread
 from utilities.dependency_injection import Container
 from settings.trigger_config import TriggerConfig
 from utilities.dependency_injection import Container
@@ -8,21 +10,21 @@ from tasks.ph_down_dose_task import PhDownTask
 from common.task_manager import TaskManager
 
 class GuiWorker:
-    thread_wrapper = None
-    nutrient_task = None
-    ph_down_task = None
     task_manager = None
+    _nutrient_thread = None     # Keep from garbage collection
+    _ph_thread = None           # Keep from garbage collection
 
-    def __init__(self) -> None:
-        self.task_manager = TaskManager()
-        
-        self.thread_wrapper = ThreadWrapper(self.task_manager)
-        self.nutrient_task = NutrientDoseTask()
-        self.ph_down_task = PhDownTask()
+    def __init__(self, task_manager = TaskManager()) -> None:       
+        self.task_manager = task_manager
 
-    ## What is causing the UI locks? Asyncio run until complete? Can tasks be injected while running?
     def action_ph_down_dose(self, button, label):
-        self.thread_wrapper.run_task(self.ph_down_task, button, label)
+        task = PhDownTask()
+
+        if not self.task_manager.is_task_active(type(task).__name__):
+            self._ph_thread = QThread()
+        
+        wrapper = ThreadWrapper(self.task_manager, task, button, label)
+        wrapper.run_task(self._ph_thread)
 
         ## ph_down_trigger = Container().ph_down_relay_factory()
         ## ph_down_trigger.set_ph_down_sensor_summary(ph_down_summary)
@@ -31,7 +33,13 @@ class GuiWorker:
         ## asyncio.run(ph_down_trigger.dose(dose_duration_seconds))
 
     def  action_nutrient_dose(self, button, label):
-        self.thread_wrapper.run_task(self.nutrient_task, button, label)
+        task = NutrientDoseTask()
+
+        if not self.task_manager.is_task_active(type(task).__name__):
+            self._nutrient_thread = QThread()
+
+        wrapper = ThreadWrapper(self.task_manager, task, button, label)
+        wrapper.run_task(self._nutrient_thread)
         
         ## nutrient_trigger = Container().nutrient_relay_factory()
         ## nutrient_trigger.set_tds_sensor_summary(tds_summary)
