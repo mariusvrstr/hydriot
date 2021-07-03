@@ -1,0 +1,70 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Hydriot",
+		"_postman_id": "1cef4048-8529-6a3f-ed4f-85cdded2ba8a",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Registered Node",
+			"request": {
+				"url": "https://{{BaseURL}}/api/node/508728DE-F6AC-48C9-9D12-F18E0674A70A",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{BasicAuth}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Sensor Data",
+			"request": {
+				"url": "https://{{BaseURL}}/api/Node/GetNodeSensorData/508728DE-F6AC-48C9-9D12-F18E0674A70A",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{BasicAuth}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Update Sensor Data",
+			"request": {
+				"url": "https://{{BaseURL}}/api/node/UpdateNodeSensors/508728DE-F6AC-48C9-9D12-F18E0674A70A",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "{{BasicAuth}}",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  {\r\n    \"name\": \"Water Level\",\r\n    \"type\": 1,\r\n    \"stringValue\": \"0\",\r\n    \"readTime\": \"2021-03-13T20:03:29.605Z\"\r\n  }\r\n]"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
