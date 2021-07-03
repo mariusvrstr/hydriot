@@ -69,8 +69,7 @@ class DoseRelayAbstract(ABC):
         self._switch_relay_off()
         self._is_dosing = False
 
-    def dose_with_online_pid_controller(self):
-        
+    def dose_with_online_pid_controller(self):        
         if not self._eligable:
             raise ValueError('Trying to dose while not in being in a correct state')         
 
@@ -82,9 +81,8 @@ class DoseRelayAbstract(ABC):
             # d. Sleep
         pass
 
-    async def dose(self, duration_in_seconds):    
+    async def dose(self, duration_in_seconds):
         await self.prime_tube_with_fluid()
-
         await self._dose(duration_in_seconds)
 
     def busy_dosing(self):

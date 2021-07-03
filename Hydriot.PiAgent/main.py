@@ -6,9 +6,8 @@
 
 import sys
 
-from PyQt5.QtCore import Qt, QThread
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QLabel, QMainWindow, QPushButton, QVBoxLayout, QWidget)
-from background_worker import BackgroundWorker
 from settings.app_config import AppConfig
 from settings.trigger_config import TriggerConfig
 from gui_worker import GuiWorker
@@ -79,15 +78,14 @@ class Window(QMainWindow):
         self.ph_down_button.clicked.connect(self.dose_ph_down)
 
         self.sensors_button = QPushButton("Start Sensors", self)        
-        self.sensors_button.clicked.connect(self.runLongTask)
+        self.sensors_button.clicked.connect(self.start_sensor_readings)
         self.sensors_label = QLabel("Sensor Readings (Background Thread)")
 
         # Set the layout
         layout = QVBoxLayout()
 
         layout.addWidget(self.sensors_label)
-        layout.addWidget(self.sensors_button)
-        
+        layout.addWidget(self.sensors_button)        
         layout.addStretch()
    
         layout.addWidget(self.nutrient_label)
@@ -103,41 +101,21 @@ class Window(QMainWindow):
     def dose_nutrient(self):
         self.nutrient_button.setEnabled(False)
         self.nutrient_label.setText(f"Starting nutrient dosage...")
-        self.gui_worker.action_nutrient_dose(self.nutrient_button, self.nutrient_label) 
-        ## self.nutrient_button.setEnabled(True)   
+        self.gui_worker.action_nutrient_dose(self.nutrient_button, self.nutrient_label)  
 
     def dose_ph_down(self):
         self.ph_down_button.setEnabled(False)
         self.ph_down_label.setText(f"Starting Ph Down dosage...")
-        self.gui_worker.action_ph_down_dose(self.ph_down_button, self.ph_down_label) ## self.get_ph_sensor(),
-        ## self.ph_down_button.setEnabled(True)
+        self.gui_worker.action_ph_down_dose(self.ph_down_button, self.ph_down_label)
+
+    def start_sensor_readings(self):
+        self.sensors_button.setEnabled(False)
+        self.ph_down_label.setText(f"Starting sensors start...")
+        self.gui_worker.action_start_sensors(self.sensors_button, self.sensors_label)
 
     def reportProgress(self, counter):
         output = self.update_sensors(counter)
         self.sensors_label.setText(f"Available Sensors >> {output}")
-
-    def runLongTask(self):
-        self.background_thread = QThread()
-        self.background_worker = BackgroundWorker()
-
-        self.background_worker.moveToThread(self.background_thread)
-
-        self.background_thread.started.connect(self.background_worker.run)
-        self.background_worker.finished.connect(self.background_thread.quit)
-        self.background_worker.finished.connect(self.background_worker.deleteLater)
-        self.background_thread.finished.connect(self.background_thread.deleteLater)
-        self.background_worker.progress.connect(self.reportProgress)
-
-        self.background_thread.start()
-
-        self.sensors_button.setEnabled(False)
-
-        self.background_thread.finished.connect(
-            lambda: self.sensors_button.setEnabled(True)
-        )
-        self.background_thread.finished.connect(
-            lambda: self.sensors_label.setText("Sensors stopped.")
-        )
 
 app = QApplication(sys.argv)
 win = Window()

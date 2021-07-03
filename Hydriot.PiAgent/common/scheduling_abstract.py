@@ -4,13 +4,13 @@ import asyncio
 
 class SchedulingAbstract(ABC):
     frequency_in_seconds = None
-    _use_average = False
-    _name = None
     task_manager = None
+    _use_average = False
+    _name = None    
     _task_name = None
 
     def is_monitoring(self):
-        return self.task_manager.is_task_active(self)
+        return self.task_manager.is_task_active(self._task_name)
 
     def __init__(self, frequency_in_seconds, name, use_average):
         self.frequency_in_seconds = frequency_in_seconds
@@ -25,6 +25,7 @@ class SchedulingAbstract(ABC):
         self.task_manager.add_task(self._task_name, self)
 
         while self.is_monitoring():
+            # print(f"Reading Sensor [{self._name}]")
             if self._use_average is True:
                 await self.read_average(20, 10)
             elif self._use_average is False:
@@ -32,7 +33,7 @@ class SchedulingAbstract(ABC):
             await asyncio.sleep(self.frequency_in_seconds)            
         
         if not self.is_monitoring():
-            print(f"[{self._name}] stopped.")
+            print(f"Not monitoring[{self._name}] stopped.")
 
     def stop_schedule(self):
         print(f"Stopping [{self._name}]...")

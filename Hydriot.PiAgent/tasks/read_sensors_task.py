@@ -1,31 +1,40 @@
-import time
-
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSignal
-from time import sleep
-from hydriot import Hydriot
-from utilities.dependency_injection import Container
-from settings.app_config import AppConfig
-from utilities.console_manager import ConsoleManager
-from utilities.integration_adapter import IntegrationAdapter
-from common.sensor_summary import SensorSummary
-from common.task_manager import TaskManager
-
-# from contracts.counter import Counter
 import asyncio
 import RPi.GPIO as GPIO
+import time
 
-class BackgroundWorker(QObject):
-    finished = pyqtSignal()
-    enabled = False
+from tasks.contracts.base_task import BaseTask
+from settings.app_config import AppConfig
+from utilities.dependency_injection import Container
+from utilities.console_manager import ConsoleManager
+from utilities.integration_adapter import IntegrationAdapter
+from common.task_manager import TaskManager
+from hydriot import Hydriot
+from common.sensor_summary import SensorSummary
+from PyQt5.QtCore import pyqtSignal
+
+class ReadSensorsTask(BaseTask):
+    progress = pyqtSignal(SensorSummary)
     integration_adapter = None
     hydriot = None
-    progress = pyqtSignal(SensorSummary)
     task_manager = None
+
+    def cleanup(self):
+        self.tds_sensor.stop_schedule()
+        self.water_level_sensor.stop_schedule()
+        self.ph_sensor.stop_schedule()
+        self.voltage_tester.stop_schedule()
+
+        if AppConfig().get_enable_sim() == False:
+            GPIO.cleanup()
+
+        self.integration_adapter.cleanup()
+
+        time.sleep(5) 
 
     async def run_container(self):
         console_manager = ConsoleManager()
 
-        while True: ## self.task_manager.is_working():
+        while self.task_manager.is_working():
             console_manager.display_sensors(self.hydriot, self.integration_adapter, self.task_manager)            
         
             ## Update pump status from water level sensor
@@ -44,16 +53,14 @@ class BackgroundWorker(QObject):
             if (self.hydriot.water_level_sensor is not None):  
                 self.progress.emit(self.hydriot.water_level_sensor)   
 
-            await asyncio.sleep(2)
+            await asyncio.sleep(3)
 
     async def run_all(self):
-        self.enabled = True
         self.task_manager = TaskManager()
-
         container = Container()
 
         self.ph_sensor = container.ph_sensor_factory()
-        
+
         if self.ph_sensor.is_enabled and self.ph_sensor.is_available():
             self.hydriot.set_ph_sensor(self.ph_sensor.sensor_summary)
             asyncio.ensure_future(self.ph_sensor.run_schedule(self.task_manager))
@@ -65,7 +72,7 @@ class BackgroundWorker(QObject):
             asyncio.ensure_future(self.tds_sensor.run_schedule(self.task_manager))
 
         self.water_level_sensor =  container.water_level_sensor_factory()
-            
+
         if self.water_level_sensor.is_enabled and self.water_level_sensor.is_available():
             self.hydriot.set_water_level_sensor(self.water_level_sensor.sensor_summary)
             asyncio.ensure_future(self.water_level_sensor.run_schedule(self.task_manager))
@@ -98,21 +105,10 @@ class BackgroundWorker(QObject):
         self.integration_adapter = IntegrationAdapter(30)
 
         await self.run_container()
+    
+    def run_custom(self):
+        print(f"starting sensors reading")
 
-    def cleanup(self):
-        self.tds_sensor.stop_schedule()
-        self.water_level_sensor.stop_schedule()
-        self.ph_sensor.stop_schedule()
-        self.voltage_tester.stop_schedule()
-
-        if AppConfig().get_enable_sim() == False:
-            GPIO.cleanup()
-
-        self.integration_adapter.cleanup()
-        # TODO: asynco wait to exit loops
-        time.sleep(10) 
-
-    def run(self): 
         self.hydriot = Hydriot()
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop) 
@@ -123,5 +119,6 @@ class BackgroundWorker(QObject):
         except KeyboardInterrupt:
             print (f'stopped')
         
-        self.cleanup()
+        ## self.cleanup()
         self.finished.emit()
+
