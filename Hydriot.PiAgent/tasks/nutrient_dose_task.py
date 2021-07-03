@@ -15,3 +15,5 @@ class NutrientDoseTask(BaseTask):
         dose_duration_seconds = TriggerConfig().get_tds_dose_time_seconds()
 
         asyncio.run(nutrient_trigger.dose(dose_duration_seconds))
+
+        self.finished.emit()

@@ -22,7 +22,7 @@ class ThreadWrapper:
         self.task_manager.remove_task(self.task_name)      
    
     def run_task(self, thread):
-        self.task_manager.add_task(self.task_name, self.current_task) ##TODO: Add debug point for cleanup to run (else it does not trigger)
+        self.task_manager.add_task(self.task_name, self.current_task) ##TODO: Add debug point for self.cleanup to run (else it does not trigger)
 
         self.current_task.moveToThread(thread)
 

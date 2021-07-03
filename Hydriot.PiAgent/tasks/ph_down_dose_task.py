@@ -15,3 +15,5 @@ class PhDownTask(BaseTask):
         dose_duration_seconds = TriggerConfig().get_ph_down_dose_time_seconds()
 
         asyncio.run(ph_down_trigger.dose(dose_duration_seconds))
+
+        self.finished.emit() 
