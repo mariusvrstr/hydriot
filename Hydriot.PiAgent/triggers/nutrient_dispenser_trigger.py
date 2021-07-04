@@ -32,5 +32,5 @@ class NutrientDispenserRelay(DoseRelayAbstract):
         GPIO.setup(self.relay_pin_pos, GPIO.OUT) # GPIO Assign mode
         DoseRelayAbstract.__init__(self, "Nutrient Dispenser Switch", enabled, TriggerConfig().get_tds_max_prime_time())
 
-    def set_tds_sensor_summary(self, tds_sensor_summary):
+    def set_dependant_sensor_summary(self, tds_sensor_summary):
         self._counter_sensor = tds_sensor_summary

@@ -8,7 +8,7 @@ from utilities.dependency_injection import Container
 from utilities.console_manager import ConsoleManager
 from utilities.integration_adapter import IntegrationAdapter
 from common.task_manager import TaskManager
-from hydriot import Hydriot
+from hydriot import Hydriot, SensorType, TriggerType
 from common.sensor_summary import SensorSummary
 from PyQt5.QtCore import pyqtSignal
 
@@ -35,11 +35,11 @@ class ReadSensorsTask(BaseTask):
         console_manager = ConsoleManager()
 
         while self.task_manager.is_working():
-            console_manager.display_sensors(self.hydriot, self.integration_adapter, self.task_manager)            
-        
+            console_manager.display_sensors(self.hydriot, self.integration_adapter, self.task_manager)
+
             ## Update pump status from water level sensor
-            if (self.water_pump_trigger is not None):
-                self.water_pump_trigger.sync_status()
+            if (self.hydriot.water_pump_trigger is not None):
+                self.hydriot.water_pump_trigger.sync_status()
 
             if (self.hydriot.tds_sensor is not None):
                 self.progress.emit(self.hydriot.tds_sensor)
@@ -47,60 +47,47 @@ class ReadSensorsTask(BaseTask):
             if (self.hydriot.ph_sensor is not None):
                 self.progress.emit(self.hydriot.ph_sensor)
 
-            if (self.hydriot.voltage_tester is not None):  
-                self.progress.emit(self.hydriot.voltage_tester)
+            if (self.hydriot.voltage_sensor is not None):  
+                self.progress.emit(self.hydriot.voltage_sensor)
 
             if (self.hydriot.water_level_sensor is not None):  
                 self.progress.emit(self.hydriot.water_level_sensor)   
 
             await asyncio.sleep(3)
+    
+    def register_sensor(self, sensor_type, sensor):
+        if sensor.is_enabled and sensor.is_available():            
+            asyncio.ensure_future(sensor.run_schedule(self.task_manager))
+            self.hydriot.set_sensor(sensor_type, sensor.sensor_summary)
+
+    def register_trigger(self, trigger_type, trigger, dependant_sensor = None):         
+        if dependant_sensor is not None:
+            trigger.set_dependant_sensor_summary(dependant_sensor.sensor_summary)
+
+        if trigger.is_enabled:            
+            self.hydriot.set_trigger(trigger_type, trigger)
 
     async def run_all(self):
         self.task_manager = TaskManager()
         container = Container()
 
-        self.ph_sensor = container.ph_sensor_factory()
+        ph_sensor = container.ph_sensor_factory()
+        self.register_sensor(SensorType.Ph, ph_sensor)
 
-        if self.ph_sensor.is_enabled and self.ph_sensor.is_available():
-            self.hydriot.set_ph_sensor(self.ph_sensor.sensor_summary)
-            asyncio.ensure_future(self.ph_sensor.run_schedule(self.task_manager))
+        tds_sensor = container.tds_factory()
+        self.register_sensor(SensorType.TDS, tds_sensor)
 
-        self.tds_sensor =  container.tds_factory()
+        water_level_sensor = container.water_level_sensor_factory()
+        self.register_sensor(SensorType.WaterLevel, water_level_sensor)
 
-        if self.tds_sensor.is_enabled and self.tds_sensor.is_available():
-            self.hydriot.set_tds_sensor(self.tds_sensor.sensor_summary)
-            asyncio.ensure_future(self.tds_sensor.run_schedule(self.task_manager))
+        voltage_sensor = container.voltage_tester_factory()
+        self.register_sensor(SensorType.Voltage, voltage_sensor)
 
-        self.water_level_sensor =  container.water_level_sensor_factory()
+        ## self.register_sensor(container.light_sensor_infrared_factory())
 
-        if self.water_level_sensor.is_enabled and self.water_level_sensor.is_available():
-            self.hydriot.set_water_level_sensor(self.water_level_sensor.sensor_summary)
-            asyncio.ensure_future(self.water_level_sensor.run_schedule(self.task_manager))
-
-        self.voltage_tester = container.voltage_tester_factory()
-        if self.voltage_tester.is_enabled and self.voltage_tester.is_available():
-            self.hydriot.set_voltage_tester(self.voltage_tester.sensor_summary)
-            asyncio.ensure_future(self.voltage_tester.run_schedule(self.task_manager))
-
-        # TODO: Need to get this working
-        # self.light_sensor_infrared =  container.light_sensor_infrared_factory()
-
-        # if self.light_sensor_infrared.is_available():
-           # self.hydriot.set_light_sensor_infrared(self.light_sensor_infrared.sensor_summary)
-           # asyncio.ensure_future(self.light_sensor_infrared.run_schedule())
-
-        self.nutrient_disposer_trigger = container.nutrient_relay_factory() 
-        if self.nutrient_disposer_trigger.is_enabled:
-            self.hydriot.set_nutrient_disposer_trigger(self.nutrient_disposer_trigger)
-
-        self.ph_down_trigger = container.ph_down_relay_factory()      
-        if self.ph_down_trigger.is_enabled:
-            self.hydriot.set_ph_down_trigger(self.ph_down_trigger)
-
-        self.water_pump_trigger = container.water_pump_relay_factory()      
-        if self.water_pump_trigger.is_enabled:
-            self.water_pump_trigger.set_water_level_sensor(self.water_level_sensor.sensor_summary)
-            self.hydriot.set_water_pump_trigger(self.water_pump_trigger)
+        self.register_trigger(TriggerType.NutrientDose, container.nutrient_relay_factory(), tds_sensor)
+        self.register_trigger(TriggerType.PhDose,container.ph_down_relay_factory())
+        self.register_trigger(TriggerType.WaterPumpCutout,container.water_pump_relay_factory(), water_level_sensor)
 
         self.integration_adapter = IntegrationAdapter(30)
 

@@ -7,4 +7,4 @@ class BaseTask(QObject):
         raise Exception(f"Not implimented for [{self.__name__}]")
     
     def run(self):
-        self.run_custom()        
+        self.run_custom()

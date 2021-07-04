@@ -1,46 +1,64 @@
 
-from configparser import NoSectionError
+from enum import Enum
+from sensors.ph_sensor import PhSensor
+
+class SensorType(Enum):
+    Undefined = 0,
+    TDS = 1,
+    Ph = 2,
+    WaterLevel = 3,
+    Voltage = 4
+
+class TriggerType(Enum):
+    Undefined = 0,
+    NutrientDose = 1,
+    PhDose = 2,
+    WaterPumpCutout = 3
 
 class Hydriot():
-    tds_sensor = None
-    water_level_sensor = None
-    ph_sensor = None
-    light_sensor_infrared = None
-    voltage_tester = None
+    sensors = dict()
+    triggers = dict()
 
-    water_pump_trigger = None 
-    nutrient_disposer_trigger = None
-    ph_down_trigger = None
+    def set_sensor(self, sensor_type, sensor):
+        self.sensors[sensor_type] = sensor
 
-    def set_tds_sensor(self, tds_sensor):
-        self.tds_sensor = tds_sensor
+    def get_sensor(self, sensor_type):
+        if sensor_type not in self.sensors:
+            return None
+        return self.sensors[sensor_type]
 
-    def set_water_level_sensor(self, water_level_sensor):
-        self.water_level_sensor = water_level_sensor
+    def set_trigger(self, trigger_type, trigger):
+        self.triggers[trigger_type] = trigger
+
+    def get_trigger(self, trigger_type):
+        if trigger_type not in self.triggers:
+            return None
+        return self.triggers[trigger_type]
+
+    @property
+    def ph_sensor(self):
+        return None if SensorType.Ph not in self.sensors else self.sensors[SensorType.Ph]
+
+    @property
+    def tds_sensor(self):
+        return None if SensorType.TDS not in self.sensors else self.sensors[SensorType.TDS]
+
+    @property
+    def water_level_sensor(self):
+        return None if SensorType.WaterLevel not in self.sensors else self.sensors[SensorType.WaterLevel]
     
-    def set_ph_sensor(self, ph_sensor):
-        self.ph_sensor = ph_sensor
+    @property
+    def voltage_sensor(self):
+        return None if SensorType.Voltage not in self.sensors else self.sensors[SensorType.Voltage]
 
-    def set_light_sensor_infrared(self, light_sensor_infrared):
-        self.light_sensor_infrared = light_sensor_infrared
-
-    def set_voltage_tester(self, voltage_tester):
-        self.voltage_tester = voltage_tester
-
-    def set_nutrient_disposer_trigger(self, nutrient_disposer_trigger):
-        self.nutrient_disposer_trigger = nutrient_disposer_trigger
+    @property
+    def nutrient_trigger(self):
+        return None if TriggerType.NutrientDose not in self.triggers else self.triggers[TriggerType.NutrientDose]
     
-    def set_ph_down_trigger(self, ph_down_trigger):
-        self.ph_down_trigger = ph_down_trigger
+    @property
+    def ph_trigger(self):
+        return None if TriggerType.PhDose not in self.triggers else self.triggers[TriggerType.PhDose]
 
-    def set_water_pump_trigger(self, water_pump_trigger):
-        self.water_pump_trigger = water_pump_trigger
-
-
-
-    
-    
-
-    
-    
-
+    @property
+    def water_pump_trigger(self):
+        return None if TriggerType.WaterPumpCutout not in self.triggers else self.triggers[TriggerType.WaterPumpCutout]

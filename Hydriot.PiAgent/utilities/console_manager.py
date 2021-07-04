@@ -1,9 +1,9 @@
+import platform
+import os
+
 from configparser import Error
 from settings.app_config import AppConfig
 from datetime import datetime
-import RPi.GPIO as GPIO
-import platform
-import os
 
 class ConsoleManager(object):
     toggle = True
@@ -85,18 +85,20 @@ class ConsoleManager(object):
             print(self.get_sensor_summary(hydriot.water_level_sensor))
         if hydriot.ph_sensor is not None:
             print(self.get_sensor_summary(hydriot.ph_sensor))
-        if hydriot.voltage_tester is not None:
-            self.writeline(self.get_sensor_summary(hydriot.voltage_tester), file)
+        if hydriot.voltage_sensor is not None:
+            self.writeline(self.get_sensor_summary(hydriot.voltage_sensor), file)
 
         print("")
         print(">>> Registered Triggers <<<")
 
         if hydriot.water_pump_trigger is not None and hydriot.water_pump_trigger.is_enabled:
                 print(self.get_trigger_summary(hydriot.water_pump_trigger))
-        if hydriot.nutrient_disposer_trigger is not None and hydriot.nutrient_disposer_trigger.is_enabled:
-                print(self.get_trigger_summary(hydriot.nutrient_disposer_trigger))
-        if hydriot.ph_down_trigger is not None and hydriot.ph_down_trigger.is_enabled:
-                print(self.get_trigger_summary(hydriot.ph_down_trigger))
+
+        if hydriot.nutrient_trigger is not None and hydriot.nutrient_trigger.is_enabled:
+                print(self.get_trigger_summary(hydriot.nutrient_trigger))
+        
+        if hydriot.ph_trigger is not None and hydriot.ph_trigger.is_enabled:
+                print(self.get_trigger_summary(hydriot.ph_trigger))
 
         print()
         print(">>> Integration Status <<<")

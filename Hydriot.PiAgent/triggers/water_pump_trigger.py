@@ -30,7 +30,7 @@ class WaterPumpRelay(OnOffRelayAbstract):
         enabled = AppConfig().is_water_pump_enabled()       
         OnOffRelayAbstract.__init__(self, "Water Pump", self.relay_pin_pos, enabled, SwitchStatus.On)
 
-    def set_water_level_sensor(self, water_sensor):
+    def set_dependant_sensor_summary(self, water_sensor):
         self.water_sensor = water_sensor
 
     ## TODO: This should be converted to a observer pattern

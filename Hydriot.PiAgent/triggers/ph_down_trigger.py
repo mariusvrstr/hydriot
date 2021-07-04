@@ -32,5 +32,5 @@ class PhDownRelay(DoseRelayAbstract):
         GPIO.setup(self.relay_pin_pos, GPIO.OUT) # GPIO Assign mode
         DoseRelayAbstract.__init__(self, "Ph-Down Switch", enabled, TriggerConfig().get_ph_down_max_prime_time())
 
-    def set_ph_down_sensor_summary(self, ph_down_sensor_summary):
+    def set_dependant_sensor_summary(self, ph_down_sensor_summary):
         self._counter_sensor = ph_down_sensor_summary
