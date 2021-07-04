@@ -13,10 +13,10 @@ from common.sensor_summary import SensorSummary
 from PyQt5.QtCore import pyqtSignal
 
 class ReadSensorsTask(BaseTask):
-    progress = pyqtSignal(SensorSummary)
     integration_adapter = None
     hydriot = None
     task_manager = None
+    progress = pyqtSignal(SensorSummary)    
 
     def cleanup(self):
         self.tds_sensor.stop_schedule()

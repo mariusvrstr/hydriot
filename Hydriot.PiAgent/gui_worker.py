@@ -10,12 +10,17 @@ from common.task_manager import TaskManager
 class GuiWorker:
     task_manager = None
     _threads = dict()           # Keep from garbage collection
+    sensors = []
+    sensor_label = None
 
     def __init__(self, task_manager = TaskManager()) -> None:       
-        self.task_manager = task_manager
-    
+        self.task_manager = task_manager    
+
     def action_start_sensors(self, button, label):
-        self.execute_task(ReadSensorsTask(), button, label)  
+        self.sensor_label = label
+        task = ReadSensorsTask()
+        task.progress.connect(self.sensor_feedback_update)        
+        self.execute_task(task, button, label)
 
     def action_ph_down_dose(self, button, label):
         self.execute_task(PhDownTask(), button, label)        
@@ -31,4 +36,28 @@ class GuiWorker:
         
         wrapper = ThreadWrapper(self.task_manager, task, button, label)
         wrapper.run_task(self._threads[job_type])
+
+    def sensor_feedback_update(self, sensor):
+        char_limit = 10
+        delimiter = "|"
+        found = False
+
+        for k in range(len(self.sensors)):
+            if sensor.name == self.sensors[k].name:
+                self.sensors[k] = sensor
+                found = True
+
+        if not found:
+            self.sensors.append(sensor)
+
+        sensor_list = ""
+        for sensor in self.sensors:
+            if len(sensor.name) <= char_limit:
+                sensor_list += f"{sensor.name}{delimiter} "
+                continue
+
+            sensor_list += f"{sensor.name[0:char_limit]}..{delimiter} "            
+
+        self.sensor_label.setText(f"Sensors: {sensor_list[0:len(sensor_list)-2]}")
+    
 

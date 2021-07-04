@@ -19,7 +19,7 @@ class ThreadWrapper:
     def cleanup(self):
         self.button.setEnabled(True)
         self.label.setText(f"Completed [{self.task_name}]")
-        self.task_manager.remove_task(self.task_name)      
+        self.task_manager.remove_task(self.task_name)
    
     def run_task(self, thread):
         self.task_manager.add_task(self.task_name, self.current_task) ##TODO: Add debug point for self.cleanup to run (else it does not trigger)
@@ -29,7 +29,7 @@ class ThreadWrapper:
         thread.started.connect(self.current_task.run)
         self.current_task.finished.connect(self.cleanup)
         self.current_task.finished.connect(thread.quit)
-        self.current_task.finished.connect(self.current_task.deleteLater)
+        self.current_task.finished.connect(self.current_task.deleteLater)        
         thread.finished.connect(thread.deleteLater)
  
         thread.start()

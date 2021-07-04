@@ -20,7 +20,6 @@ class Window(QMainWindow):
     voltage_tester = None    
     light_trigger = None
     water_pump_trigger = None
-    sensors = []
     gui_worker = None
 
     def __init__(self):
@@ -40,24 +39,7 @@ class Window(QMainWindow):
         for sensor in self.sensors:
             if "ph" in sensor.name.lower():
                 return sensor        
-        return None   
-
-    def update_sensors(self, counter):
-        found = False
-
-        for k in range(len(self.sensors)):
-            if counter.name == self.sensors[k].name:
-                self.sensors[k] = counter
-                found = True
-
-        if not found:
-            self.sensors.append(counter)
-
-        sensor_message = ""
-        for sensor in self.sensors:
-            sensor_message += f"{sensor.name}, "
-
-        return sensor_message
+        return None    
 
     def setupUi(self):
         self.setWindowTitle("Hydriot Node")
